@@ -11,6 +11,6 @@ func main(){
 	fmt.Println("	 CHÔMAGE & DRAGONS")
 	fmt.Println("La quête du loose, du PMU et du RSA")
 	fmt.Println("_______________________________")
-	name := red.AskPlayer("Comment vous appelez vous ?")
+	name := red.AskPlayerType("Comment vous appelez vous ?", "")
 	fmt.Println(name)
 }
