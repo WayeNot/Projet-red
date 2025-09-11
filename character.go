@@ -3,27 +3,28 @@ package main
 import "fmt"
 
 type Character struct {
-	Name       string
-	Pv         int
-	Pv_max     int
-	Shield     int
-	Shield_max int
-	Level      int
-	Xp         int
-	Money      int
-	Is_dead    bool
-	Inventory  Inventory
+	Name       	string
+	Pv         	int
+	Pv_max     	int
+	Shield     	int
+	Shield_max 	int
+	Level      	int
+	Xp         	int
+	Money      	int
+	Is_dead    	bool
+	Inventory  	Inventory
 }
 
 type Inventory struct {
-	Items    []Item
-	Slot_max int
+	Items    	[]Item
+	Slot_max 	int
 }
 
 type Item struct {
-	Name     string
-	Quantity int
-	Price    int
+	Id 			int
+	Name     	string
+	Quantity 	int
+	Price    	int
 }
 
 func strTest(placeHolder string) string {
@@ -60,7 +61,6 @@ func (p Character) accessInventory() {
 	} else {
 		print("Aucun item pour le moment !")
 	}
-
 }
 
 func main() {
