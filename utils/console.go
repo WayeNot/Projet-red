@@ -9,14 +9,7 @@ import (
 	"strconv"
 )
 
-// func main() {
-//  	badam := askPlayer("Comment vous appelez-vous ?")
-//  	fmt.Println("answer : ", badam)
-// 	fmt.Printf("%T\n", badam)
-//  	age := askPlayer("age ?")
-// }
-
-func askPlayer(question string) interface{} {
+func AskPlayer(question string) interface{} {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print(question, " : ")
 	text, _ := reader.ReadString('\n')
