@@ -9,6 +9,6 @@ func (i *Character) addItem(itemId int, itemQuantity int) {
 		Quantity: itemQuantity,
 	})
 	for _,v := range allItems {
-		fmt.Println(v, " - ")
+		fmt.Println(v, "")
 	}
 }
