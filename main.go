@@ -13,4 +13,5 @@ func main(){
 	fmt.Println("_______________________________")
 	name := red.AskPlayerType("Comment vous appelez vous ?", "")
 	fmt.Println(name)
+	red.DisplayMenu(red.InitCharacter())
 }

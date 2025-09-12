@@ -33,26 +33,19 @@ var allItems = map[int]Item{
 	2: {Id: 2, Name: "Épée", Price: 350},
 }
 
-func strTest(placeHolder string) string {
-	var response string
-	fmt.Println(placeHolder)
-	fmt.Scanln(&response)
-	return response
-}
-
 func New(Name string, Pv, Pv_max, Shield, Shield_max, Level, Xp int, Money int, Is_dead bool, Inventory []Inventory) Character {
 	return Character{Name, Pv, Pv_max, Shield, Shield_max, Level, Xp, Money, Is_dead, Inventory}
 }
 
-func initCharacter() {
-	name := strTest("Quel est le nom de votre personnage ?")
+func InitCharacter() {
+	name := AskPlayer("Quel est le nom de votre personnage ?")
 
 	char := New(name, 100, 100, 100, 100, 1, 0, 1000, false, []Inventory{})
 	char.displayPlayer()
 	char.accessInventory()
 }
 
-func (p Character) displayPlayer() {
+func (p Character) DisplayPlayer() {
 	fmt.Println("--------------------------------------------------")
 	fmt.Println("Nom du personnage : ", p.Name)
 	fmt.Println("Vie / Bouclier du personnage : [", p.Pv, "|", p.Shield, "]")
@@ -60,16 +53,11 @@ func (p Character) displayPlayer() {
 	fmt.Println("Argent : ", p.Money)
 }
 
-func (p Character) accessInventory() {
+func (p Character) AccessInventory() {
 	inv := p.Inventory
 	if len(inv) > 0 {
 		print("Yes")
 	} else {
 		print("Aucun item pour le moment !")
 	}
-}
-
-func red() {
-	initCharacter()
-	Character.accessInventory(Character{})
 }
