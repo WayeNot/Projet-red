@@ -69,7 +69,7 @@ func (p Character) accessInventory() {
 	}
 }
 
-// func red() {
-// 	initCharacter()
-// 	Character.accessInventory(Character{})
-// }
+func red() {
+	initCharacter()
+	Character.accessInventory(Character{})
+}
