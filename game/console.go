@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func AskPlayer(question string) any {
+func AskPlayer(question string) interface{} {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print(question, " : ")
 	text, _ := reader.ReadString('\n')
@@ -26,30 +26,29 @@ func AskPlayer(question string) any {
 /*
 	Si on veut forcer le type de la réponse du joueur.
 */
-func AskPlayerType(question string, forcedtType any) any {
+func AskPlayerString(question string) string {
 	reader := bufio.NewReader(os.Stdin)
 	
-	for {
-		fmt.Print(question, " : ")
-		text, _ := reader.ReadString('\n')
-		text = strings.TrimSpace(text)
+	fmt.Print(question, " : ")
+	text, _ := reader.ReadString('\n')
+	text = strings.TrimSpace(text)
+	
+	return text
+}
 
-		switch forcedtType.(type) {
-		case int:
-			if isInt(text) {
-				num, _ := strconv.Atoi(text)
-				return num
-			}
-		case string:
-			if text != "" {
-				return text
-			}
-		default:
-			return text
+func AskPlayerInt(question string) int {
+	reader := bufio.NewReader(os.Stdin)
+	
+	fmt.Print(question, " : ")
+	text, _ := reader.ReadString('\n')
+	text = strings.TrimSpace(text)
+
+	if isInt(text) {
+		if number, err := strconv.Atoi(text); err == nil {
+			return number
 		}
-
-		fmt.Println("Mauvaise réponse ! Veuillez rentrer le bon type.")
 	}
+	return 0
 }
 
 func isInt(s string) bool {

@@ -1,13 +1,8 @@
-package main
+package red
 
 import (
 	"fmt"
 )
-
-type Item struct {
-	Name  string
-	Price int
-}
 
 type Player struct {
 	Name   string

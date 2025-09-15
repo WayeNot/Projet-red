@@ -13,7 +13,7 @@ type Menu struct {
 	Name    string
 	Choices []Choice
 }
-*
+
 func (m *Menu) Display(character Character) {
 	fmt.Println("_______________________________________")
 	fmt.Println(m.Name)
@@ -25,7 +25,7 @@ func (m *Menu) Display(character Character) {
 
 	fmt.Println("_______________________________________")
 
-	result := AskPlayerType("Votre choix :", 0).(int)
+	result := AskPlayerInt("Votre choix :")
 
 	if result >= 1 && result <= len(m.Choices) {
 		m.Choices[result-1].Action(character)

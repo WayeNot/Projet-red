@@ -1,9 +1,7 @@
-package character
+package red
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"slices"
 	"strings"
 )
@@ -45,7 +43,7 @@ type CharacterType struct {
 }
 
 var chooseCharacter = map[int]CharacterType {
-	1: {Id: 1, Name: ""}
+	1: {Id: 1, Name: ""},
 }
 
 var allItems = map[int]Item {
@@ -57,17 +55,10 @@ func New(Name string, Pv, Pv_max, Shield, Shield_max, Level, Xp int, Money int, 
 	return Character{Name, Pv, Pv_max, Shield, Shield_max, Level, Xp, Money, Is_dead, Inventory}
 }
 
-func AskPlayer(text string) string {
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print(text)
-	input, _ := reader.ReadString('\n')
-	return input
-}
-
 func InitCharacter(charName string) Character {
-	name := ""
+	var name string
 	if charName == "" {
-		name = AskPlayer("Quel est le nom de votre joueur ? ")
+		name = AskPlayerString("Quel est le nom de votre joueur ? ")
 		if len(name) > 0 {
             finalName := strings.ToUpper(name[:1]) + strings.ToLower(name[1:])
             name = finalName

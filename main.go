@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"red/utils"
+	"red/game"
 )
 
 func main(){
@@ -11,7 +11,8 @@ func main(){
 	fmt.Println("	 CHÔMAGE & DRAGONS")
 	fmt.Println("La quête du loose, du PMU et du RSA")
 	fmt.Println("_______________________________")
-	name := red.AskPlayerType("Comment vous appelez vous ?", "")
+	name := red.AskPlayerString("Comment vous appelez vous ?")
 	fmt.Println(name)
-	red.DisplayMenu(red.InitCharacter())
+	player := red.InitCharacter(name)
+	player.DisplayPlayer()
 }
