@@ -17,7 +17,7 @@ Ton but :
 
 ## 🧙 Histoire
 
-Tu es un héros sans gloire, fraîchement diplômé de l’Université de la Galère.  
+Tu es un héros sans gloire, fraîchement diplômé de Ynov Galère Campus.  
 Tes armes ? Un CV pourri et un sac à dos troué.  
 Ton destin ? Taper des menus dans un terminal en espérant décrocher un taf de Paladin payé au SMIC.  
 
@@ -34,7 +34,7 @@ Ton destin ? Taper des menus dans un terminal en espérant décrocher un taf de 
   - **5. Quitter (ou aller pointer)**  
 
 - Combat **tour par tour** façon RPG.  
-- Humour absurde mais **politiquement correct**.  
+- Humour absurde mais **politiquement correct** (pour Flonox).  
 
 ---
 
@@ -45,7 +45,8 @@ Ton destin ? Taper des menus dans un terminal en espérant décrocher un taf de 
 - Attaques :  
   - *Question piège* (-20 PV moral)  
   - *Sourire hypocrite* (ignore ton armure)  
-  - *"On vous rappellera"* (tu perds 1 tour entier)  
+  - *"On vous rappellera"* (tu perds 1 tour entier)
+  - *"Vous n'avez pas l'expérience requise"* (tu freezes pendant 2 tours)  
 
 ### 📈 Objectif final
 Obtenir le **CDI Légendaire** (Contrat de Durée Infinie), trésor ultime des aventuriers précaires.  
