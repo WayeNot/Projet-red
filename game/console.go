@@ -47,7 +47,10 @@ func AskPlayerInt(question string) int {
 		if number, err := strconv.Atoi(text); err == nil {
 			return number
 		}
+	} else {
+		AskPlayerInt(question)
 	}
+
 	return 0
 }
 
