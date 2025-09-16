@@ -24,7 +24,7 @@ func (c *Character) MenuForgeron() {
 			c.BuyForgeronItem()
 		case 0:
 			fmt.Println("Vous quittez le forgeron.")
-			return
+			
 		default:
 			fmt.Println("Choix invalide.")
 		}

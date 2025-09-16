@@ -14,24 +14,30 @@ func RandomNbr(max int) int {
 func (c *Character) MenuMerchant() {
 	var playerChoice int
 
-	fmt.Println("-------------------------------------")
-	fmt.Println("     Bienvenue chez le Marchand      ")
-	fmt.Println("-------------------------------------")
-	fmt.Println("Voici les options disponibles :")
-
-	fmt.Println(" - Appuyez sur 1 pour acheter")
-	fmt.Println(" - Appuyez sur 2 pour vendre")
-	fmt.Println(" - Appuyez sur 0 pour quitter")
-
 	for {
+		fmt.Print("\033[H\033[2J")
+		fmt.Println("-------------------------------------")
+		fmt.Println("     Bienvenue chez le Marchand      ")
+		fmt.Printf("          Quantité de ₣ : %v          \n", c.Money)
+		fmt.Println("-------------------------------------")
+		fmt.Println("Voici les options disponibles :")
+
+		fmt.Println(" - Appuyez sur 1 pour acheter")
+		if len(c.Inventory) > 0 {
+			fmt.Println(" - Appuyez sur 2 pour vendre")
+		}
+		fmt.Println(" - Appuyez sur 0 pour quitter")
+		fmt.Println("")
 		fmt.Print("Votre choix : ")
 		fmt.Scanln(&playerChoice)
 
 		switch playerChoice {
 		case 1:
 			c.BuyMerchantItem()
-		case 2:
-			c.sellMerchantItem()
+		case 2 :
+			if len(c.Inventory) > 0 {
+				c.sellMerchantItem()
+			}
 		case 0:
 			fmt.Println("Vous quittez le marchand.")
 			return
@@ -62,8 +68,8 @@ func (c *Character) BuyMerchantItem() {
 			allChoice = append(allChoice, randomNbr)
 		}
 	}
-
 	fmt.Println("Articles disponibles à l’achat :")
+	fmt.Println("")
 	for k, v := range allChoice {
 		item := allItems[v]
 		fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣")

@@ -111,18 +111,19 @@ func (c *Character) RemoveItem(itemId, itemQuantity int) {
 func (c Character) AccessInventory() {
 	inv := c.Inventory
 
-	fmt.Println("-------------------------------------")
-	fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", c.MaxInventory, " ) ")
-	fmt.Println("-------------------------------------")
 	if len(inv) > 0 {
+		fmt.Println("-------------------------------------")
+		fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", c.MaxInventory, " ) ")
+		fmt.Println("-------------------------------------")
 		for k, v := range inv {
 			item := allItems[v.Id]
 			fmt.Println(k + 1,") Item : ", item.Icon, " | ", item.Name, "x", v.Quantity, "/ Prix :", item.Price, "₣")
 		}
 	} else {
+		fmt.Println("---------------------------")
 		fmt.Println("Aucun item pour le moment !")
+		fmt.Println("---------------------------")
 	}
-	fmt.Println("---------------------------")
 }
 
 func (c *Character) UseItem(itemId, q int) {
