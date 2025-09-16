@@ -2,7 +2,6 @@ package red
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 )
 
@@ -59,107 +58,6 @@ func (c *Character) HandleDeath() {
 		c.Pv = c.PvMax / 2
 		c.IsDead = false
 	}
-}
-
-func (c Character) GetItemNumber() int {
-	result := 0
-	for _, v := range c.Inventory {
-		result += v.Quantity
-	}
-	return result
-}
-
-func (c Character) AccessInventory() {
-	inv := c.Inventory
-
-	fmt.Println("-------------------------------------")
-	fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", c.MaxInventory, " ) ")
-	fmt.Println("-------------------------------------")
-	if len(inv) > 0 {
-		for k, v := range inv {
-			item := allItems[v.Id]
-			fmt.Println(k + 1,") Item : ", item.Icon, " | ", item.Name, "x", v.Quantity, "/ Prix :", item.Price, "₣")
-		}
-	} else {
-		fmt.Println("Aucun item pour le moment !")
-	}
-	fmt.Println("---------------------------")
-}
-
-func (c *Character) AddItem(itemId, itemQuantity int) {
-	if c.GetItemNumber() >= c.MaxInventory {
-		fmt.Println("Impossible d'ajouter cet item, vous n'avez plus de places !")
-		return
-	}
-	for i, v := range c.Inventory {
-		if v.Id == itemId {
-			c.Inventory[i].Quantity += itemQuantity
-			return
-		}
-	}
-	c.Inventory = append(c.Inventory, Inventory{
-		Id:       itemId,
-		Quantity: itemQuantity,
-	})
-}
-
-func (c *Character) RemoveItem(itemId, itemQuantity int) {
-	for k, v := range c.Inventory {
-		if v.Id == itemId {
-			if itemQuantity >= v.Quantity {
-				c.Inventory = slices.Delete(c.Inventory, k, k+1)
-			} else {
-				c.Inventory[k].Quantity -= itemQuantity
-			}
-			return
-		}
-	}
-	fmt.Println("Vous n’avez pas cet objet dans votre inventaire.")
-}
-
-func GetItemIdExist(itemId int) bool {
-	_, exist := allItems[itemId]
-	return exist
-}
-
-// 
-
-func (c *Character) UseItem(itemId, q int) {
-	if !GetItemIdExist(itemId) {
-		fmt.Println("Erreur dans l'item sélectionné !")
-		return
-	}
-
-	item := allItems[itemId]
-
-	if !item.IsUsable {
-		fmt.Println("Cet item n'est pas utilisable !")
-		return
-	}
-
-	if item.addHealth > 0 {
-		if c.Pv + item.addHealth <= c.PvMax {
-			c.Pv += item.addHealth
-		} else {
-			c.Pv = c.PvMax
-		}
-	}
-
-	if item.giveInventory > 0 {
-		c.MaxInventory += item.giveInventory
-	}
-
-	if item.removeEnemyHealth > 0 {
-		fmt.Println("Vous attaqué l'ennemi !")
-	}
-
-	for _, n := range c.Inventory {
-		if n.Id == itemId && n.Quantity >= q {
-			c.RemoveItem(itemId, q)
-			return
-		}
-	}
-	fmt.Println("Vous n'avez pas assez de cet item !")
 }
 
 func (c *Character) UpdateMoney(q int, s string) {
