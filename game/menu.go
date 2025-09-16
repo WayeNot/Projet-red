@@ -15,15 +15,16 @@ type Menu struct {
 }
 
 func (m *Menu) Display(character *Character) {
-	fmt.Println("_______________________________________")
+	fmt.Println("---------------------------------------")
 	fmt.Println(m.Name)
-	fmt.Println("_______________________________________")
+	fmt.Println("---------------------------------------")
+	fmt.Println("")
 
 	for i, choice := range m.Choices {
 		fmt.Printf(" - %s -> Tapez %d\n", choice.Label, i+1)
 	}
 
-	fmt.Println("_______________________________________")
+	fmt.Println("\n")
 
 	result := AskPlayerInt("Votre choix :")
 

@@ -6,11 +6,11 @@ import (
 )
 
 func main(){
-	fmt.Println("_______________________________")
+	fmt.Println("-------------------------------------")
 	fmt.Println("	  Bienvenue dans ")
 	fmt.Println("	 CHÔMAGE & DRAGONS")
 	fmt.Println("La quête du loose, du PMU et du RSA")
-	fmt.Println("_______________________________")
+	fmt.Println("-------------------------------------")
 	player := red.InitCharacter("")
 	player.DisplayPlayer()
 
@@ -26,7 +26,7 @@ func main(){
 			{
 				Label: "Ouvrir l’inventaire",
 				Action: func(p *red.Character) {
-					fmt.Println("Bientot sac a merde")
+					p.AccessInventory()
 				},
 			},
 			{

@@ -45,7 +45,8 @@ func New(Name string, Pv, Pv_max, Shield, Shield_max, Level, Xp int, Money int, 
 func InitCharacter(charName string) Character {
 	name := ""
 	if charName == "" {
-		name = AskPlayerString("Quel est le nom de votre joueur ? ")
+		fmt.Println("\n")
+		name = AskPlayerString("Comment vous appelez vous ?")
 		if len(name) > 0 {
             finalName := strings.ToUpper(name[:1]) + strings.ToLower(name[1:])
             name = finalName
@@ -53,10 +54,10 @@ func InitCharacter(charName string) Character {
 	} else {
         name = strings.ToUpper(charName[:1]) + strings.ToLower(charName[1:])
 	}
+	fmt.Println("\n")
 
 	char := New(name, 100, 100, 0, 100, 1, 0, 0, false, []Inventory{})
 	char.Pv = char.Pv_max / 2
-	char.DisplayPlayer()
 	return char
 }
 
@@ -92,12 +93,9 @@ func (c Character) GetItemNumber() int {
 func (c Character) AccessInventory() {
 	inv := c.Inventory
 	MaxInventoryItems := 10
-	// var userChoice int
 
-	fmt.Print("\033[H\033[2J")
 	fmt.Println("-------------------------------------")
-	fmt.Println("    Votre Inventaire : (", c.GetItemNumber(), " / ", MaxInventoryItems, " )      ")
-	fmt.Println(" Tapper quit pour revenir en arrière ")
+	fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", MaxInventoryItems, " ) ")
 	fmt.Println("-------------------------------------")
 	if len(inv) > 0 {
 		for k, v := range inv {
