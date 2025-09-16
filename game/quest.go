@@ -23,3 +23,7 @@ func (q *Quest) RewardPlayer(character Character) {
 func IsCompleted(q Quest) bool {
 	return q.IsCompleted
 }
+
+func InitQuests() {
+	
+}
