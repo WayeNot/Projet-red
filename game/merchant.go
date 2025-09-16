@@ -6,9 +6,16 @@ import (
 	"time"
 )
 
+var allItems = map[int]Item {
+	1: {Id: 1, Name: "Pomme", Price: 15, Icon: "🍎", addHealth: 20},
+	2: {Id: 2, Name: "Épée", Price: 15, Icon: "🗡️"},
+
+}
+
 func (c *Character) MenuMerchant() {
 	canSell := false
 	canBuy := false
+	var playerChoice int
 
 	if len(c.Inventory) > 0 {
 		canSell = true
@@ -18,7 +25,7 @@ func (c *Character) MenuMerchant() {
 		canBuy = true
 	}
 
-	fmt.Print("\033[H\033[2J")
+	// fmt.Print("\033[H\033[2J")
 
 	fmt.Println("-------------------------------------")
 	fmt.Println("     Bienvenue chez le marchand      ")
@@ -32,14 +39,42 @@ func (c *Character) MenuMerchant() {
 		fmt.Println(" Appuyez sur 1 pour acheter un item ")
 		fmt.Println(" Appuyez sur 2 pour vendre un item ")
 		fmt.Println("---------------------------------")
+		for {
+			fmt.Print("Votre choix : ")
+			fmt.Scanln(&playerChoice)
+			switch playerChoice {
+				case 1:
+					c.BuyMerchantItem()
+					break
+				case 2:
+					c.sellMerchantItem()
+					break
+			}
+		}
 	} else if canSell && !canBuy {
 		fmt.Println("")
 		fmt.Println(" Appuyez sur 1 pour vendre un item ")
 		fmt.Println("-----------------------------------")
+		for {
+			fmt.Print("Votre choix : ")
+			fmt.Scanln(&playerChoice)
+			if playerChoice == 1 {
+				c.sellMerchantItem()
+				break
+			}
+		}
 	} else if !canSell && canBuy {
 		fmt.Println("")
 		fmt.Println(" Appuyez sur 1 pour acheter un item ")
 		fmt.Println("-----------------------------------")
+		for {
+			fmt.Print("Votre choix : ")
+			fmt.Scanln(&playerChoice)
+			if playerChoice == 1 {
+				c.BuyMerchantItem()
+				break
+			}
+		}
 	} else {
 		fmt.Println("---------------------------------------")
 		fmt.Println(" Vous ne pouvez ni vendre ni acheter ! ")
@@ -56,21 +91,20 @@ func RandomNbr(max int) int {
 
 func (c *Character) BuyMerchantItem() {
 	allChoice := []int{}
-	countChoices := 0
 	var nbrChoice int
 	count := 0
 
-	for countChoices <= 2 {
-		countChoices += 1
+	for len(allChoice) <= 2 {
 		allChoice = append(allChoice, RandomNbr(len(allItems) - 1))
 	}
 
 	for k,v := range allChoice {
+		print("AllChoices = ", v)
 		count += 1
 		fmt.Println(k + 1,") Item : ", allItems[v].Icon, " | ", allItems[v].Name, "/ Prix :", allItems[v].Price, "₣")
 	}
 
-	fmt.Println("Quelle item choisissez-vous ?", 1, " - ", count, "/ (quit) pour sortir")
+	fmt.Println("Quelle item choisissez-vous ?", 1, "-", count)
 	fmt.Scan(&nbrChoice)
 	
 	for _, v := range allChoice {
@@ -79,6 +113,8 @@ func (c *Character) BuyMerchantItem() {
 			c.UpdateMoney(allItems[v].Price, "-")
 		}
 	}
+
+	c.MenuMerchant()
 }
 
 func (c *Character) sellMerchantItem() {
@@ -115,4 +151,5 @@ func (c *Character) sellMerchantItem() {
 		fmt.Println("Aucun item pour le moment !")
 	}
 	fmt.Println("---------------------------")
+	c.MenuMerchant()
 }
