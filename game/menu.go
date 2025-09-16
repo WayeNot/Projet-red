@@ -6,7 +6,7 @@ import (
 
 type Choice struct {
 	Label string          	
-	Action func(Character) // Fonction d'execution
+	Action func(*Character) // Fonction d'execution
 }
 
 type Menu struct {
@@ -14,7 +14,7 @@ type Menu struct {
 	Choices []Choice
 }
 
-func (m *Menu) Display(character Character) {
+func (m *Menu) Display(character *Character) {
 	fmt.Println("_______________________________________")
 	fmt.Println(m.Name)
 	fmt.Println("_______________________________________")
