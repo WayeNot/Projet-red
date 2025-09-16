@@ -26,11 +26,15 @@ type Inventory struct {
 }
 
 type Item struct {
-	Id    int
-	Name  string
-	Price int
-	Icon  string
-	addHealth int
+	Id    				int
+	Name  				string
+	Price 				int
+	Icon  				string
+	addHealth 			int
+	removeEnemyHealth 	int
+	giveInventory		int
+	IsForgeron 			bool
+	IsUsable 			bool
 }
 
 func New(Name string, Pv, PvMax, Shield, Shield_max, Level, Xp int, Money int, IsDead bool, MaxInventory int, Inventory []Inventory) Character {
@@ -137,23 +141,42 @@ func GetItemIdExist(itemId int) bool {
 
 // 
 
-func (c *Character) UseItem(itemId int) {
+func (c *Character) UseItem(itemId, q int) {
 	if !GetItemIdExist(itemId) {
 		fmt.Println("Erreur dans l'item sélectionné !")
 		return
 	}
 
-	if allItems[itemId].addHealth == 0 {
+	item := allItems[itemId]
+
+	if !item.IsUsable {
 		fmt.Println("Cet item n'est pas utilisable !")
 		return
 	}
 
-	c.RemoveItem(itemId, 1)
-	if c.Pv + allItems[itemId].addHealth <= c.PvMax {
-		c.Pv += allItems[itemId].addHealth
-	} else {
-		c.Pv = c.PvMax
+	if item.addHealth > 0 {
+		if c.Pv + item.addHealth <= c.PvMax {
+			c.Pv += item.addHealth
+		} else {
+			c.Pv = c.PvMax
+		}
 	}
+
+	if item.giveInventory > 0 {
+		c.MaxInventory += item.giveInventory
+	}
+
+	if item.removeEnemyHealth > 0 {
+		fmt.Println("Vous attaqué l'ennemi !")
+	}
+
+	for _, n := range c.Inventory {
+		if n.Id == itemId && n.Quantity >= q {
+			c.RemoveItem(itemId, q)
+			return
+		}
+	}
+	fmt.Println("Vous n'avez pas assez de cet item !")
 }
 
 func (c *Character) UpdateMoney(q int, s string) {
