@@ -58,8 +58,5 @@ func (b *Boss) GetAttacks() []func(*Character) {
 }
 
 func (b *Boss) IsDead() bool {
-	if b.Dead == false{
-		return false
-	}
-	return true
+	return b.Dead
 }
