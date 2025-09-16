@@ -9,13 +9,14 @@ import (
 type Character struct {
 	Name       string
 	Pv         int
-	Pv_max     int
+	PvMax     int
 	Shield     int
 	Shield_max int
 	Level      int
 	Xp         int
 	Money      int
-	Is_dead    bool
+	IsDead    bool
+	MaxInventory int
 	Inventory  []Inventory
 }
 
@@ -32,8 +33,8 @@ type Item struct {
 	addHealth int
 }
 
-func New(Name string, Pv, Pv_max, Shield, Shield_max, Level, Xp int, Money int, Is_dead bool, Inventory []Inventory) Character {
-	return Character{Name, Pv, Pv_max, Shield, Shield_max, Level, Xp, 500, Is_dead, Inventory}
+func New(Name string, Pv, PvMax, Shield, Shield_max, Level, Xp int, Money int, IsDead bool, MaxInventory int, Inventory []Inventory) Character {
+	return Character{Name, Pv, PvMax, Shield, Shield_max, Level, Xp, Money, IsDead, MaxInventory, Inventory}
 }
 
 func InitCharacter(charName string) Character {
@@ -50,8 +51,8 @@ func InitCharacter(charName string) Character {
 	}
 	fmt.Println("\n")
 
-	char := New(name, 100, 100, 0, 100, 1, 0, 0, false, []Inventory{})
-	char.Pv = char.Pv_max / 2
+	char := New(name, 100, 100, 0, 100, 1, 0, 100, false, 10, []Inventory{})
+	char.Pv = char.PvMax / 2
 	return char
 }
 
@@ -64,15 +65,12 @@ func (p Character) DisplayPlayer() {
 	fmt.Println("--------------------------------------------------")
 }
 
-func (c *Character) SetPlayerDead() {
-	c.Is_dead = true
-	c.Pv = 0
-	c.Shield = 0
-}
-
-func (c *Character) IsDead() {
+func (c *Character) HandleDeath() {
 	if c.Pv <= 0 {
-		c.Pv = c.Pv_max / 2
+		c.IsDead = true
+		fmt.Println(c.Name, "est mort... mais ressuscite à 50% de sa vie !")
+		c.Pv = c.PvMax / 2
+		c.IsDead = false
 	}
 }
 
@@ -86,15 +84,14 @@ func (c Character) GetItemNumber() int {
 
 func (c Character) AccessInventory() {
 	inv := c.Inventory
-	MaxInventoryItems := 10
 
 	fmt.Println("-------------------------------------")
-	fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", MaxInventoryItems, " ) ")
+	fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", c.MaxInventory, " ) ")
 	fmt.Println("-------------------------------------")
 	if len(inv) > 0 {
 		for k, v := range inv {
 			item := allItems[v.Id]
-			fmt.Println(k + 1,") Item : ", item.Icon, " | ", item.Name, "/ Prix :", item.Price, "₣")
+			fmt.Println(k + 1,") Item : ", item.Icon, " | ", item.Name, "x", v.Quantity, "/ Prix :", item.Price, "₣")
 		}
 	} else {
 		fmt.Println("Aucun item pour le moment !")
@@ -103,8 +100,15 @@ func (c Character) AccessInventory() {
 }
 
 func (c *Character) AddItem(itemId, itemQuantity int) {
-	if len(c.Inventory) >= 10 {
+	if c.GetItemNumber() >= c.MaxInventory {
 		fmt.Println("Impossible d'ajouter cet item, vous n'avez plus de places !")
+		return
+	}
+	for i, v := range c.Inventory {
+		if v.Id == itemId {
+			c.Inventory[i].Quantity += itemQuantity
+			return
+		}
 	}
 	c.Inventory = append(c.Inventory, Inventory{
 		Id:       itemId,
@@ -114,14 +118,16 @@ func (c *Character) AddItem(itemId, itemQuantity int) {
 
 func (c *Character) RemoveItem(itemId, itemQuantity int) {
 	for k, v := range c.Inventory {
-		if itemId == v.Id {
-			if v.Quantity == itemQuantity {
+		if v.Id == itemId {
+			if itemQuantity >= v.Quantity {
 				c.Inventory = slices.Delete(c.Inventory, k, k+1)
 			} else {
-				c.Inventory[k].Quantity = v.Quantity - itemQuantity
+				c.Inventory[k].Quantity -= itemQuantity
 			}
+			return
 		}
 	}
+	fmt.Println("Vous n’avez pas cet objet dans votre inventaire.")
 }
 
 func GetItemIdExist(itemId int) bool {
@@ -143,17 +149,19 @@ func (c *Character) UseItem(itemId int) {
 	}
 
 	c.RemoveItem(itemId, 1)
-	if c.Pv + allItems[itemId].addHealth <= c.Pv_max {
+	if c.Pv + allItems[itemId].addHealth <= c.PvMax {
 		c.Pv += allItems[itemId].addHealth
 	} else {
-		c.Pv = c.Pv_max
+		c.Pv = c.PvMax
 	}
 }
 
 func (c *Character) UpdateMoney(q int, s string) {
 	switch s {
 		case "-":
-			c.Money -= q
+			if (c.Money - q) >= 0 {
+				c.Money -= q
+			}
 		case "+":
 			c.Money += q
 	}
