@@ -26,7 +26,7 @@ func (m *Menu) Display(character *Character) {
 
 	fmt.Println("\n")
 
-	result := AskPlayerInt("Votre choix :")
+	result := AskPlayerInt("Votre choix")
 
 	if result >= 1 && result <= len(m.Choices) {
 		m.Choices[result-1].Action(character)

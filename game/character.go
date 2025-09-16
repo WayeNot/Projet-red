@@ -32,12 +32,6 @@ type Item struct {
 	addHealth int
 }
 
-var allItems = map[int]Item {
-	1: {Id: 1, Name: "Pomme", Price: 15, Icon: "🍎", addHealth: 20},
-	2: {Id: 2, Name: "Épée", Price: 15, Icon: "🗡️"},
-
-}
-
 func New(Name string, Pv, Pv_max, Shield, Shield_max, Level, Xp int, Money int, Is_dead bool, Inventory []Inventory) Character {
 	return Character{Name, Pv, Pv_max, Shield, Shield_max, Level, Xp, 500, Is_dead, Inventory}
 }

@@ -30,9 +30,9 @@ func main(){
 				},
 			},
 			{
-				Label: "NTM",
+				Label: "Accéder au marchand",
 				Action: func(p *red.Character) {
-					fmt.Println("Bientot sac a merde")
+					p.MenuMerchant()
 				},
 			},
 			{
