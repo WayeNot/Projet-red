@@ -20,23 +20,6 @@ type Character struct {
 	Inventory  []Inventory
 }
 
-type Inventory struct {
-	Id       int
-	Quantity int
-}
-
-type Item struct {
-	Id    				int
-	Name  				string
-	Price 				int
-	Icon  				string
-	addHealth 			int
-	removeEnemyHealth 	int
-	giveInventory		int
-	IsForgeron 			bool
-	IsUsable 			bool
-}
-
 func New(Name string, Pv, PvMax, Shield, Shield_max, Level, Xp int, Money int, IsDead bool, MaxInventory int, Inventory []Inventory) Character {
 	return Character{Name, Pv, PvMax, Shield, Shield_max, Level, Xp, Money, IsDead, MaxInventory, Inventory}
 }

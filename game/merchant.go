@@ -6,15 +6,6 @@ import (
 	"time"
 )
 
-var allItems = map[int]Item{
-	// Potions ↓
-
-	1: {Id: 1, Name: "Potion de vie", Price: 3, Icon: "➕", IsForgeron: false, addHealth: 15},
-	2: {Id: 2, Name: "Potion de poison", Price: 6, Icon: "🤢", IsForgeron: false, removeEnemyHealth: 10},
-
-	4: {Id: 4, Name: "Sac à dos", Price: 30, Icon: "🎒", IsForgeron: false, giveInventory: 10},
-}
-
 func RandomNbr(max int) int {
 	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(max) + 1 // +1 pour éviter l’index 0
