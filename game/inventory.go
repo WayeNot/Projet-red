@@ -9,7 +9,6 @@ import (
 type Inventory struct {
 	Id       int
 	Quantity int
-	loseRate int
 }
 
 type Item struct {
@@ -32,17 +31,19 @@ type Item struct {
 	itemNeededQuantity   int
 	RewardIG             bool
 	loseRate         	 int
+	randomLoseRate		 int
+	randomLoseMessage	 string
 }
 
 var allItems = map[int]Item{
 
 	// ------------------- Ressources Marchand ↓
 
-	1: {Id: 1, Name: "Pain sec", Price: 2, Icon: "🍞", desc: "Vous croquez ce pain sec… vos dents grincent, mais vous regagnez 5 PV !" ,IsForgeron: false, AddHealth: 5, IsUsableInGame: true},
-	2: {Id: 2, Name: "Kebab du Destin", Price: 15, Icon: "🍔", desc: "Un vrai kebab de quartier… vous vous sentez invincible (+15 PV) !", IsForgeron: false, AddHealth: 15, IsUsableInGame: true},
+	1: {Id: 1, Name: "Pain sec", Price: 2, Icon: "🍞", desc: "Vous croquez ce pain sec… vos dents grincent, mais vous regagnez 5 PV !" ,IsForgeron: false, AddHealth: 5, IsUsableInGame: true, randomLoseRate: 15, randomLoseMessage: "Votre 🍞 Pain sec était tellement dur qu’il s’est effrité en miettes dans votre sac… perdu."},
+	2: {Id: 2, Name: "Kebab du Destin", Price: 15, Icon: "🍔", desc: "Un vrai kebab de quartier… vous vous sentez invincible (+15 PV) !", IsForgeron: false, AddHealth: 15, IsUsableInGame: true, randomLoseRate: 15, randomLoseMessage: "Le 🌯 Kebab du Destin a fui son papier alu… il s’est répandu dans votre sac. Adieu, sauce blanche."},
 
-	3: {Id: 3, Name: "8.6 tiède", Price: 4, Icon: "🍺", desc: "Vous buvez une 8.6 tiède… ça descend mal, mais ça remonte la barre (+5 PV).", IsForgeron: false, AddHealth: 5, IsUsableInGame: true},
-	4: {Id: 4, Name: "Canette de Kronenbourg", Price: 10, Icon: "🥤", desc: "Glou glou… vous sentez la puissance du houblon populaire (+10 PV).", IsForgeron: false, AddHealth: 10, IsUsableInGame: true},
+	3: {Id: 3, Name: "8.6 tiède", Price: 4, Icon: "🍺", desc: "Vous buvez une 8.6 tiède… ça descend mal, mais ça remonte la barre (+5 PV).", IsForgeron: false, AddHealth: 5, IsUsableInGame: true, randomLoseRate: 15, randomLoseMessage: "La 🍺 8.6 tiède s’est percée au fond du sac… une odeur maltée imprègne toutes vos affaires."},
+	4: {Id: 4, Name: "Canette de Kronenbourg", Price: 10, Icon: "🥤", desc: "Glou glou… vous sentez la puissance du houblon populaire (+10 PV).", IsForgeron: false, AddHealth: 10, IsUsableInGame: true, randomLoseRate: 15, randomLoseMessage: "Votre 🍻 canette de Kro a explosé dans votre sac. Dommage… mais au moins vous sentez l’alcool cheap à 3 km."},
 
 	5: {Id: 5, Name: "Stylo BIC", Price: 3, Icon: "🖊", IsForgeron: false, IsUsableInGame: true},
 	6: {Id: 6, Name: "Formulaire Cerfa 666-B", Price: 6, Icon: "📄", IsForgeron: false, RessourceForForgeron: true},
@@ -129,7 +130,7 @@ func (c Character) AccessInventory() {
 			fmt.Println("Aucun item pour le moment !")
 			fmt.Println("---------------------------")
 		}
-		ChoiceUser := AskPlayerInt("Tapez le numéro d'un item pour intéragir avec (0 pour annuler) : ")
+		ChoiceUser := AskPlayerInt("Tapez le numéro d'un item pour intéragir avec (0 pour annuler)")
 
 		if ChoiceUser == 0 {
 			return
@@ -190,7 +191,8 @@ func (c *Character) GetRandomItem() int {
 	for {
 		random := RandomNbr(len(c.Inventory))
 
-		if random != 0 {
+		if random > 0 {
+			fmt.Println("Random Number : ", random)
 			return c.Inventory[random].Id
 		}
 	}

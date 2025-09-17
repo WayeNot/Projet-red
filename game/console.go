@@ -1,12 +1,14 @@
 package red
 
 import (
-	"fmt"
 	"bufio"
+	"fmt"
+	"math/rand"
 	"os"
-	"unicode"
-	"strings"
 	"strconv"
+	"strings"
+	"time"
+	"unicode"
 )
 
 func AskPlayer(question string) interface{} {
@@ -65,4 +67,9 @@ func isInt(s string) bool {
 		}
 	}
 	return true
+}
+
+func RandomNbr(max int) int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max)
 }

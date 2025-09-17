@@ -13,7 +13,7 @@ type Character struct {
 	Money        int
 	IsDead       bool
 	MaxInventory int
-	LoseRate	 int
+	LoseRate     int
 	Inventory    []Inventory
 }
 
@@ -24,7 +24,6 @@ func New(Name string, Pv, PvMax, Xp int, Money int, IsDead bool, MaxInventory, L
 func InitCharacter(charName string) Character {
 	name := ""
 	if charName == "" {
-		fmt.Println("\n")
 		name = AskPlayerString("Comment vous appelez vous ?")
 		if len(name) > 0 {
 			finalName := strings.ToUpper(name[:1]) + strings.ToLower(name[1:])
@@ -99,9 +98,19 @@ func (c *Character) GetMaxPV() int {
 
 func (c *Character) UpdateXp(q int, s string) {
 	switch s {
-		case "-":
-			c.Xp -= q
-		case "+":
-			c.Xp += q
-		}
+	case "-":
+		c.Xp -= q
+	case "+":
+		c.Xp += q
+	}
+}
+
+func (c *Character) EditName() {
+	editPrice := 30
+	if c.Money >= editPrice {
+		c.Name = AskPlayerString("Votre nouveau pseudo")
+		c.UpdateMoney(editPrice, "-")
+		return
+	}
+	fmt.Println("Pas assez d'argent")
 }
