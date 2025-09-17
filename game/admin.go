@@ -30,50 +30,51 @@ func (c *Character) AdminMenu() {
 		}
 
 		if commandAdmin == "logs" {
-			// viewLogs()
 			fmt.Println(awaitingDev)
 		}
 
-		if commandAdmin == "ClearInventory" {
+		switch commandAdmin {
+		case "ClearInventory":
 			for _, v := range c.Inventory {
 				c.RemoveItem(v.Id, v.Quantity)
 			}
 			fmt.Println("Tous les items viennent d'être remove !")
-		} else if commandAdmin == "Heal" {
+		case "Heal":
 			c.Pv = c.PvMax
-		} else if commandAdmin == "SetHealth" {
+		case "SetHealth":
 			fmt.Println("Votre vie actuelle : ", c.Pv)
 			c.Pv = AskPlayerInt("Combien de vie voulez-vous vous mettre ?")
-		} else if commandAdmin == "SetMoney" {
+		case "SetMoney":
 			fmt.Println("Montant de vos poches : ", c.Money)
 			c.Money = AskPlayerInt("Combien voulez-vous d'argent ?")
-		} else if commandAdmin == "SetXp" {
+		case "SetXp":
 			fmt.Println("Nombre de Xp actuelle : ", c.Xp)
 			c.Xp = AskPlayerInt("Combien voulez-vous de Xp ?")
-		} else if commandAdmin == "AddItem" {
+		case "AddItem":
 			c.AddItem(AskPlayerInt("Id de l'item souhaitée"), AskPlayerInt("Quantité d'item souhaité ?"))
-		} else if commandAdmin == "RemoveItem" {
+		case "RemoveItem":
 			c.AccessInventory()
 			c.RemoveItem(AskPlayerInt("Id de l'item souhaitée"), AskPlayerInt("Quantité d'item souhaité ?"))
 		}
 
 		// Commandes RP
 
-		if commandAdmin == "InflationON" {
+		switch commandAdmin {
+		case "InflationON":
 			for _, v := range allItems {
 				v.Price *= 2
 			}
-		} else if commandAdmin == "InflationOff" {
+		case "InflationOff":
 			for _, v := range allItems {
 				v.Price /= 2
 			}
-		} else if commandAdmin == "GodMode" {
+		case "GodMode":
 			c.MaxInventory += 999999999999999
 			c.Money += 999999999999999
 			c.PvMax += 999999999999999
 			c.Pv += 999999999999999
 			c.Xp += 999999999999999
-		} else if commandAdmin == "RmGodMode" {
+		case "RmGodMode":
 			c.MaxInventory -= 999999999999999
 			c.Money -= 999999999999999
 			c.PvMax -= 999999999999999
@@ -83,9 +84,10 @@ func (c *Character) AdminMenu() {
 
 		// Commandes GamePlay
 
-		if commandAdmin == "SpawnMerchant" {
+		switch commandAdmin {
+		case "SpawnMerchant":
 			c.MenuMerchant()
-		} else if commandAdmin == "SpawnForgeron" {
+		case "SpawnForgeron":
 			c.MenuForgeron()
 		}
 	}
@@ -97,8 +99,4 @@ func (m *Moderation) SetLogs(msg string) {
 		msg: msg,
 		date: time.Now().Format("02/01/2006 15:04:05"),
 	})
-}
-
-func (m *Moderation) viewLogs() {
-
 }
