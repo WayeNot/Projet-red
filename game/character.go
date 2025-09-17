@@ -35,8 +35,6 @@ func InitCharacter(charName string) Character {
 	} else {
         name = strings.ToUpper(charName[:1]) + strings.ToLower(charName[1:])
 	}
-	fmt.Println("\n")
-
 	char := New(name, 100, 100, 0, 100, 1, 0, 100, false, 10, []Inventory{})
 	char.Pv = char.PvMax / 2
 	return char
