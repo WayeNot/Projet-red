@@ -15,7 +15,7 @@ func (c *Character) MenuSellers() {
 	var playerChoice int
 
 	for {
-		fmt.Print("\033[H\033[2J")
+		ClearTerminal()
 		fmt.Println("-------------------------------------")
 		fmt.Println("    Voici les magasins disponibles   ")
 		fmt.Println("-------------------------------------")
@@ -44,7 +44,7 @@ func (c *Character) MenuMerchant() {
 	var playerChoice int
 
 	for {
-		fmt.Print("\033[H\033[2J")
+		ClearTerminal()
 		fmt.Println("-------------------------------------")
 		fmt.Println("     Bienvenue chez le Marchand      ")
 		fmt.Printf("          Quantité de ₣ : %v          \n", c.Money)
@@ -77,9 +77,8 @@ func (c *Character) MenuMerchant() {
 }
 
 func (c *Character) BuyMerchantItem() {
-	allChoice := []int{}
-
 	for {
+		allChoice := []int{}
 		for len(allChoice) < 3 {
 			randomNbr := RandomNbr(len(allItems))
 			itemRnd := allItems[randomNbr]
@@ -99,25 +98,28 @@ func (c *Character) BuyMerchantItem() {
 				allChoice = append(allChoice, randomNbr)
 			}
 		}
+
 		fmt.Println("-------------------------------------")
 		fmt.Printf("          Quantité de ₣ : %v          \n", c.Money)
 		fmt.Println("   Articles disponibles à l’achat :  ")
 		fmt.Println("-------------------------------------")
 
 		fmt.Println("")
+
 		for k, v := range allChoice {
 			item := allItems[v]
 			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣")
 		}
 
-		var nbrChoice int
-		fmt.Print("Quel article choisissez-vous (0 pour annuler) ? ")
-		fmt.Scan(&nbrChoice)
+		fmt.Println("")
+
+		nbrChoice := AskPlayerInt("Quel article choisissez-vous (0 pour annuler) ? ")
 
 		if nbrChoice == 0 {
 			fmt.Println("Achat annulé.")
 			return
 		}
+
 		if nbrChoice < 1 || nbrChoice > len(allChoice) {
 			fmt.Println("Choix invalide.")
 			return
@@ -137,57 +139,82 @@ func (c *Character) BuyMerchantItem() {
 
 		c.AddItem(chosen.Id, 1)
 		c.UpdateMoney(chosen.Price, "-")
-		fmt.Println("Vous avez acheté : x1", chosen.Icon, chosen.Name)
+		fmt.Printf("Vous avez acheté : %v | %v x1\n", chosen.Name, chosen.Icon)
+		
+		if !chosen.IsUsableInGame {
+			c.UseItem(chosen.Id, 1)
+		}
 	}
 }
 
 func (c *Character) sellMerchantItem() {
-	inv := c.Inventory
-	if len(inv) == 0 {
+	ClearTerminal()
+
+	if len(c.Inventory) == 0 {
 		fmt.Println("Aucun item à vendre.")
 		return
 	}
 
-	fmt.Println("Votre inventaire :")
-	for k, v := range inv {
-		item := allItems[v.Id]
-		fmt.Println(k+1, ")", item.Icon, "|", item.Name, "x", v.Quantity, "- Prix de vente :", item.Price/2, "₣")
+	for len(c.Inventory) > 0 {
+		if len(c.Inventory) <= 0 {
+			return
+		}
+
+		ClearTerminal()
+		
+		fmt.Println("-------------------------------------")
+		fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), "/", c.MaxInventory, ") ")
+		fmt.Println("-------------------------------------")
+
+		for k, v := range c.Inventory {
+			item := allItems[v.Id]
+			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "x", v.Quantity, "- Prix de vente :", item.Price/2, "₣")
+		}
+
+		userChoice := AskPlayerInt("Tapez le numéro de l’objet à vendre (0 pour annuler) : ")
+		var itemNbr int
+		chosenInv := c.Inventory[userChoice-1]
+		item := allItems[chosenInv.Id]
+
+		if userChoice == 0 {
+			fmt.Println("Vente annulée.")
+			return
+		}
+
+		if userChoice < 1 || userChoice > len(c.Inventory) {
+			fmt.Println("Choix invalide.")
+			return
+		}
+
+		if chosenInv.Quantity > 1 {
+			itemNbr = AskPlayerInt("Combien voulez-vous en vendre ?")
+		} else {
+			itemNbr = 1
+		}
+
+		price := (item.Price / 2) * itemNbr
+
+		c.RemoveItem(item.Id, itemNbr)
+		c.UpdateMoney(price, "+")
+		fmt.Printf("Vous avez vendu %v %v x %v et gagné %d₣\n", item.Icon, item.Name, itemNbr, price)
 	}
-
-	var userChoice int
-	fmt.Print("Tapez le numéro de l’objet à vendre (0 pour annuler) : ")
-	fmt.Scanln(&userChoice)
-
-	if userChoice == 0 {
-		fmt.Println("Vente annulée.")
-		return
-	}
-	if userChoice < 1 || userChoice > len(inv) {
-		fmt.Println("Choix invalide.")
-		return
-	}
-
-	chosenInv := inv[userChoice-1]
-	item := allItems[chosenInv.Id]
-	price := item.Price / 2
-
-	c.RemoveItem(item.Id, 1)
-	c.UpdateMoney(price, "+")
-	fmt.Printf("Vous avez vendu %v %v et gagné %d₣\n", item.Icon, item.Name, price)
 }
 
 func (c *Character) MenuForgeron() {
 	var playerChoice int
 
-	fmt.Println("-------------------------------------")
-	fmt.Println("     Bienvenue chez le forgeron      ")
-	fmt.Println("-------------------------------------")
-	fmt.Println("Voici les options disponibles :")
-
-	fmt.Println(" - Appuyez sur 1 pour acheter")
-	fmt.Println(" - Appuyez sur 0 pour quitter")
-
 	for {
+
+		ClearTerminal()
+
+		fmt.Println("-------------------------------------")
+		fmt.Println("     Bienvenue chez le forgeron      ")
+		fmt.Println("-------------------------------------")
+		fmt.Println("Voici les options disponibles :")
+
+		fmt.Println(" - Appuyez sur 1 pour acheter")
+		fmt.Println(" - Appuyez sur 0 pour quitter")
+
 		fmt.Print("Votre choix : ")
 		fmt.Scanln(&playerChoice)
 
@@ -196,7 +223,7 @@ func (c *Character) MenuForgeron() {
 			c.BuyForgeronItem()
 		case 0:
 			fmt.Println("Vous quittez le forgeron.")
-			break
+			return
 			
 		default:
 			fmt.Println("Choix invalide.")
@@ -205,39 +232,43 @@ func (c *Character) MenuForgeron() {
 }
 
 func (c *Character) BuyForgeronItem() {
-	allChoice := []int{}
+	for {
+		allChoice := []int{}
+		for len(allChoice) < 3 {
+			randomNbr := RandomNbr(len(allItems))
 
-	for len(allChoice) < 3 {
-		randomNbr := RandomNbr(len(allItems))
+			if !allItems[randomNbr].IsForgeron {
+				continue
+			}
 
-		if !allItems[randomNbr].IsForgeron {
-			continue
-		}
+			exists := false
 
-		exists := false
-
-		for _, v := range allChoice {
-			if v == randomNbr {
-				exists = true
+			for _, v := range allChoice {
+				if v == randomNbr {
+					exists = true
+				}
+			}
+			if !exists {
+				allChoice = append(allChoice, randomNbr)
 			}
 		}
-		if !exists {
-			allChoice = append(allChoice, randomNbr)
+
+		fmt.Println("-------------------------------------")
+		fmt.Printf("          Quantité de ₣ : %v          \n", c.Money)
+		fmt.Println("   Articles disponibles à l’achat :  ")
+		fmt.Println("-------------------------------------")
+
+		fmt.Println("")
+
+		for k, v := range allChoice {
+			item := allItems[v]
+			itemNeed := allItems[item.itemNeeded]
+			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣ | Item nécessaire : ", itemNeed.Icon, " | ", itemNeed.Name, "x", item.itemNeededQuantity)
 		}
-	}
 
-	fmt.Println("Articles disponibles à l’achat :")
-	for k, v := range allChoice {
-		item := allItems[v]
-		itemNeed := allItems[item.itemNeeded]
-		fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣ | Item nécessaire : ", itemNeed.Icon, " | ", itemNeed.Name, "x", item.itemNeededQuantity)
-	}
+		fmt.Println("")
 
-	var nbrChoice int
-
-	for {
-		fmt.Print("Quel article choisissez-vous (0 pour annuler) ? ")
-		fmt.Scan(&nbrChoice)
+		nbrChoice := AskPlayerInt("Quel article choisissez-vous (0 pour annuler) ?")
 
 		if nbrChoice == 0 {
 			fmt.Println("Achat annulé.")
@@ -256,17 +287,20 @@ func (c *Character) BuyForgeronItem() {
 			fmt.Println("₣ - Vous n’avez pas assez d’argent !")
 			return
 		}
+
 		if c.GetItemNumber() >= c.MaxInventory {
 			fmt.Println("Vous n’avez plus de place dans votre inventaire !")
 			return
 		}
 
 		itemNeeded := allItems[allItems[nbrChoice].itemNeeded].Id
+
 		for _, v := range c.Inventory {
 			if v.Id == itemNeeded {
 				c.AddItem(chosen.Id, 1)
-				c.UpdateMoney(chosen.Price, "-")		
-				break
+				c.UpdateMoney(chosen.Price, "-")	
+				fmt.Printf("Vous avez acheté : %v | %v x1\n", chosen.Name, chosen.Icon)	
+				return
 			}
 		}
 
