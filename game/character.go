@@ -9,17 +9,16 @@ type Character struct {
 	Name         string
 	Pv           int
 	PvMax        int
-	Shield       int
-	Shield_max   int
 	Xp           int
 	Money        int
 	IsDead       bool
 	MaxInventory int
+	LoseRate	 int
 	Inventory    []Inventory
 }
 
-func New(Name string, Pv, PvMax, Shield, Shield_max, Xp int, Money int, IsDead bool, MaxInventory int, Inventory []Inventory) Character {
-	return Character{Name, Pv, PvMax, Shield, Shield_max, Xp, Money, IsDead, MaxInventory, Inventory}
+func New(Name string, Pv, PvMax, Xp int, Money int, IsDead bool, MaxInventory, LoseRate int, Inventory []Inventory) Character {
+	return Character{Name, Pv, PvMax, Xp, Money, IsDead, MaxInventory, LoseRate, Inventory}
 }
 
 func InitCharacter(charName string) Character {
@@ -34,7 +33,7 @@ func InitCharacter(charName string) Character {
 	} else {
 		name = strings.ToUpper(charName[:1]) + strings.ToLower(charName[1:])
 	}
-	char := New(name, 100, 100, 0, 100, 0, 100, false, 10, []Inventory{})
+	char := New(name, 100, 100, 0, 100, false, 10, 0, []Inventory{})
 	char.Pv = char.PvMax / 2
 	return char
 }
@@ -42,7 +41,7 @@ func InitCharacter(charName string) Character {
 func (c Character) DisplayPlayer() {
 	fmt.Println("--------------------------------------------------")
 	fmt.Println("Nom du personnage : ", c.Name)
-	fmt.Println("Vie / Bouclier du personnage : [", c.Pv, "|", c.Shield, "]")
+	fmt.Println("Vie du personnage : [", c.Pv, "]")
 	fmt.Println("XP administratif : [", c.Xp, "]")
 	fmt.Println("Argent : ", c.Money, "€")
 	fmt.Println("Item dans l'inventaire :", c.GetItemNumber(), "/", c.MaxInventory)

@@ -9,6 +9,7 @@ import (
 type Inventory struct {
 	Id       int
 	Quantity int
+	loseRate int
 }
 
 type Item struct {
@@ -16,6 +17,7 @@ type Item struct {
 	Name                 string
 	Price                int
 	Icon                 string
+	desc				 string
 	AddHealth            int
 	removeEnemyHealth    int
 	TimeUsing            int
@@ -29,26 +31,26 @@ type Item struct {
 	itemNeeded           int
 	itemNeededQuantity   int
 	RewardIG             bool
-	canLooseItem         int
+	loseRate         	 int
 }
 
 var allItems = map[int]Item{
 
 	// ------------------- Ressources Marchand ↓
 
-	1: {Id: 1, Name: "Pain sec", Price: 2, Icon: "🍞", IsForgeron: false, AddHealth: 5, IsUsableInGame: true},
-	2: {Id: 2, Name: "Kebab du Destin", Price: 15, Icon: "🍔", IsForgeron: false, AddHealth: 15, IsUsableInGame: true},
+	1: {Id: 1, Name: "Pain sec", Price: 2, Icon: "🍞", desc: "Vous croquez ce pain sec… vos dents grincent, mais vous regagnez 5 PV !" ,IsForgeron: false, AddHealth: 5, IsUsableInGame: true},
+	2: {Id: 2, Name: "Kebab du Destin", Price: 15, Icon: "🍔", desc: "Un vrai kebab de quartier… vous vous sentez invincible (+15 PV) !", IsForgeron: false, AddHealth: 15, IsUsableInGame: true},
 
-	3: {Id: 3, Name: "8.6 tiède", Price: 4, Icon: "🍺", IsForgeron: false, AddHealth: 5, IsUsableInGame: true},
-	4: {Id: 4, Name: "Canette de Kronenbourg", Price: 10, Icon: "🥤", IsForgeron: false, AddHealth: 10, IsUsableInGame: true},
+	3: {Id: 3, Name: "8.6 tiède", Price: 4, Icon: "🍺", desc: "Vous buvez une 8.6 tiède… ça descend mal, mais ça remonte la barre (+5 PV).", IsForgeron: false, AddHealth: 5, IsUsableInGame: true},
+	4: {Id: 4, Name: "Canette de Kronenbourg", Price: 10, Icon: "🥤", desc: "Glou glou… vous sentez la puissance du houblon populaire (+10 PV).", IsForgeron: false, AddHealth: 10, IsUsableInGame: true},
 
 	5: {Id: 5, Name: "Stylo BIC", Price: 3, Icon: "🖊", IsForgeron: false, IsUsableInGame: true},
 	6: {Id: 6, Name: "Formulaire Cerfa 666-B", Price: 6, Icon: "📄", IsForgeron: false, RessourceForForgeron: true},
 	7: {Id: 7, Name: "Carte Navigo périmée", Price: 1, Icon: "🎫", IsForgeron: false, RessourceForForgeron: true},
 	8: {Id: 8, Name: "CV Légendaire", Price: 20, Icon: "📃", IsForgeron: true, PtsAttack: 10, itemNeeded: 4, itemNeededQuantity: 1}, // stylo BIC
 
-	9:  {Id: 9, Name: "Sac à dos troué", Price: 20, Icon: "🎒", IsForgeron: false, giveInventory: 5, IsUsableInGame: false, canLooseItem: 20},
-	10: {Id: 10, Name: "Sac à dos Décathlon", Price: 35, Icon: "🎒", IsForgeron: false, giveInventory: 10, IsUsableInGame: false},
+	9:  {Id: 9, Name: "Sac à dos troué", Price: 20, Icon: "🎒", desc: "Vous équipez un sac douteux… espérons que vos affaires ne tombent pas en route.", IsForgeron: false, giveInventory: 5, IsUsableInGame: false, loseRate: 20},
+	10: {Id: 10, Name: "Sac à dos Décathlon", Price: 35, Icon: "🎒", desc: "Pratique et robuste ! Vous pouvez désormais transporter plus de babioles inutiles", IsForgeron: false, giveInventory: 10, IsUsableInGame: false},
 
 	// Ressources de craft pour le Forgeron ↓
 
@@ -60,9 +62,9 @@ var allItems = map[int]Item{
 
 	// ------------------- Ressources Forgeron ↓
 
-	16: {Id: 16, Name: "Casquette du Chômeur", Price: 15, Icon: "🧢", IsForgeron: true, AddPvMax: 5, itemNeeded: 9, itemNeededQuantity: 1},             // laine de chèvre
-	17: {Id: 17, Name: "Costume d’Entretien Froissé", Price: 20, Icon: "🤵", IsForgeron: true, AddPvMax: 10, itemNeeded: 10, itemNeededQuantity: 1},    // attestation
-	18: {Id: 18, Name: "Chaussures de Sécurité Abîmées", Price: 30, Icon: "🥾", IsForgeron: true, AddPvMax: 15, itemNeeded: 11, itemNeededQuantity: 1}, // ticket resto
+	16: {Id: 16, Name: "Casquette du Chômeur", Price: 15, Icon: "🧢", desc: "Un couvre-chef stylé… protège autant du soleil que du marché de l’emploi.", IsForgeron: true, AddPvMax: 5, itemNeeded: 9, itemNeededQuantity: 1},             // laine de chèvre
+	17: {Id: 17, Name: "Costume d’Entretien Froissé", Price: 20, Icon: "🤵", desc: "Il gratte, il brille, il sent le stress. Parfait pour convaincre un recruteur blasé.", IsForgeron: true, AddPvMax: 10, itemNeeded: 10, itemNeededQuantity: 1},    // attestation
+	18: {Id: 18, Name: "Chaussures de Sécurité Abîmées", Price: 30, Icon: "🥾", desc: "Encore pleines de poussière… elles ont déjà survécu à trois chantiers.", IsForgeron: true, AddPvMax: 15, itemNeeded: 11, itemNeededQuantity: 1}, // ticket resto
 
 	19: {Id: 19, Name: "Épée en SMIC", Price: 25, Icon: "🗡️", IsForgeron: true, PtsAttack: 15, itemNeeded: 13, itemNeededQuantity: 1},       // lingot de SMIC
 	20: {Id: 20, Name: "Arc de Syndicaliste", Price: 18, Icon: "🏹", IsForgeron: true, PtsAttack: 12, itemNeeded: 12, itemNeededQuantity: 1}, // badge CGT
@@ -162,8 +164,8 @@ func (c *Character) UseItem(itemId, q int) {
 		fmt.Printf("Vous avez %v points de vies supplémentaires !", item.AddPvMax)
 	}
 
-	if item.canLooseItem > 0 {
-		fmt.Println("Vous avez perdu un item de votre sac à dos troué")
+	if item.loseRate > 0 {
+		c.LoseRate += item.loseRate
 	}
 
 	if item.giveInventory > 0 {
@@ -182,4 +184,14 @@ func (c *Character) UseItem(itemId, q int) {
 		}
 	}
 	fmt.Println("Vous n'avez pas assez de cet item !")
+}
+
+func (c *Character) GetRandomItem() int {
+	for {
+		random := RandomNbr(len(c.Inventory))
+
+		if random != 0 {
+			return c.Inventory[random].Id
+		}
+	}
 }
