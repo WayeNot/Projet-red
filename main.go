@@ -30,7 +30,7 @@ func main(){
 				},
 			},
 			{
-				Label: "Accéder au marchand",
+				Label: "Centre d'échange",
 				Action: func(p *red.Character) {
 					red.ClearTerminal()
 					p.MenuSellers()
