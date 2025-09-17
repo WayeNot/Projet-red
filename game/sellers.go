@@ -21,7 +21,7 @@ func (c *Character) MenuSellers() {
 		fmt.Println("-------------------------------------")
 		fmt.Println("Voici les options disponibles :")
 
-		fmt.Println(" - Appuyez sur 1 pour se rendre au Marchand\n- Appuyez sur 2 pour se rendre au Forgeron\n- Appuyez sur 0 pour revenir en arrière")
+		fmt.Println(" - Appuyez sur 1 pour se rendre au Marchand\n - Appuyez sur 2 pour se rendre au Forgeron\n - Appuyez sur 0 pour revenir en arrière")
 		fmt.Println("")
 		fmt.Print("Votre choix : ")
 		fmt.Scanln(&playerChoice)
@@ -189,6 +189,7 @@ func (c *Character) MenuForgeron() {
 			c.BuyForgeronItem()
 		case 0:
 			fmt.Println("Vous quittez le forgeron.")
+			break
 			
 		default:
 			fmt.Println("Choix invalide.")
@@ -221,7 +222,8 @@ func (c *Character) BuyForgeronItem() {
 	fmt.Println("Articles disponibles à l’achat :")
 	for k, v := range allChoice {
 		item := allItems[v]
-		fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣")
+		itemNeed := allItems[item.itemNeeded]
+		fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣ | Item nécessaire : ", itemNeed.Icon, " | ", itemNeed.Name, "x", item.itemNeededQuantity)
 	}
 
 	var nbrChoice int
