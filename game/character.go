@@ -6,21 +6,20 @@ import (
 )
 
 type Character struct {
-	Name       string
-	Pv         int
-	PvMax     int
-	Shield     int
-	Shield_max int
-	Level      int
-	Xp         int
-	Money      int
-	IsDead    bool
+	Name         string
+	Pv           int
+	PvMax        int
+	Shield       int
+	Shield_max   int
+	Xp           int
+	Money        int
+	IsDead       bool
 	MaxInventory int
-	Inventory  []Inventory
+	Inventory    []Inventory
 }
 
-func New(Name string, Pv, PvMax, Shield, Shield_max, Level, Xp int, Money int, IsDead bool, MaxInventory int, Inventory []Inventory) Character {
-	return Character{Name, Pv, PvMax, Shield, Shield_max, Level, Xp, Money, IsDead, MaxInventory, Inventory}
+func New(Name string, Pv, PvMax, Shield, Shield_max, Xp int, Money int, IsDead bool, MaxInventory int, Inventory []Inventory) Character {
+	return Character{Name, Pv, PvMax, Shield, Shield_max, Xp, Money, IsDead, MaxInventory, Inventory}
 }
 
 func InitCharacter(charName string) Character {
@@ -29,23 +28,24 @@ func InitCharacter(charName string) Character {
 		fmt.Println("\n")
 		name = AskPlayerString("Comment vous appelez vous ?")
 		if len(name) > 0 {
-            finalName := strings.ToUpper(name[:1]) + strings.ToLower(name[1:])
-            name = finalName
-        }
+			finalName := strings.ToUpper(name[:1]) + strings.ToLower(name[1:])
+			name = finalName
+		}
 	} else {
-        name = strings.ToUpper(charName[:1]) + strings.ToLower(charName[1:])
+		name = strings.ToUpper(charName[:1]) + strings.ToLower(charName[1:])
 	}
-	char := New(name, 100, 100, 0, 100, 1, 0, 100, false, 10, []Inventory{})
+	char := New(name, 100, 100, 0, 100, 0, 100, false, 10, []Inventory{})
 	char.Pv = char.PvMax / 2
 	return char
 }
 
-func (p Character) DisplayPlayer() {
+func (c Character) DisplayPlayer() {
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Nom du personnage : ", p.Name)
-	fmt.Println("Vie / Bouclier du personnage : [", p.Pv, "|", p.Shield, "]")
-	fmt.Println("Level / Xp : [", p.Level, " | ", p.Xp, "]")
-	fmt.Println("Argent : ", p.Money, "₣")
+	fmt.Println("Nom du personnage : ", c.Name)
+	fmt.Println("Vie / Bouclier du personnage : [", c.Pv, "|", c.Shield, "]")
+	fmt.Println("XP administratif : [", c.Xp, "]")
+	fmt.Println("Argent : ", c.Money, "€")
+	fmt.Println("Item dans l'inventaire :", c.GetItemNumber(), "/", c.MaxInventory)
 	fmt.Println("--------------------------------------------------")
 }
 
@@ -60,17 +60,17 @@ func (c *Character) HandleDeath() {
 
 func (c *Character) UpdateMoney(q int, s string) {
 	switch s {
-		case "-":
-			if (c.Money - q) >= 0 {
-				c.Money -= q
-			}
-		case "+":
-			c.Money += q
+	case "-":
+		if (c.Money - q) >= 0 {
+			c.Money -= q
+		}
+	case "+":
+		c.Money += q
 	}
 }
 
 func (c *Character) AddPV(pv int) {
-	if c.GetPV() + pv > c.GetMaxPV() {
+	if c.GetPV()+pv > c.GetMaxPV() {
 		fmt.Println("Action impossicle, PV limités à ", c.GetMaxPV())
 	} else {
 		c.Pv += pv
@@ -78,7 +78,7 @@ func (c *Character) AddPV(pv int) {
 }
 
 func (c *Character) RemovePV(pv int) {
-	if c.GetPV() - pv <= 0 {
+	if c.GetPV()-pv <= 0 {
 		c.SetPV(0)
 		c.IsDead = true
 	} else {
@@ -90,10 +90,19 @@ func (c *Character) SetPV(pv int) {
 	c.Pv = pv
 }
 
-func (c *Character) GetPV() int{
+func (c *Character) GetPV() int {
 	return c.Pv
 }
 
-func (c *Character) GetMaxPV() int{
+func (c *Character) GetMaxPV() int {
 	return c.PvMax
+}
+
+func (c *Character) UpdateXp(q int, s string) {
+	switch s {
+		case "-":
+			c.Xp -= q
+		case "+":
+			c.Xp += q
+		}
 }
