@@ -95,14 +95,17 @@ func Quest1(player *red.Character) {
 				Action: func(p *red.Character) {
 					fmt.Println("Vous êtes présent !")
 					fmt.Println("+10 XP administratif !")
+					player.UpdateXp(10, "+")
 				},
 			},
 			{
 				Label: "Ne pas pointer",
 				Action: func(p *red.Character) {
 					fmt.Println("Le manager vous appelle.. Il n'est pas content de votre absence !")
-					fmt.Println("-10 €. Pôle Emploi vient de vous débiter 10 euros..")
+					fmt.Println("-10 €. Pôle Emploi vient de vous débiter 10 euros.. Et -10 XP administratif !")
 					fmt.Println("Soyez présent à l'avenir !")
+					player.UpdateMoney(10, "-")
+					player.UpdateXp(10, "+")
 				},
 			},
 		},
