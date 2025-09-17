@@ -110,18 +110,24 @@ func (c *Character) RemoveItem(itemId, itemQuantity int) {
 func (c Character) AccessInventory() {
 	inv := c.Inventory
 
-	if len(inv) > 0 {
-		fmt.Println("-------------------------------------")
-		fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", c.MaxInventory, " ) ")
-		fmt.Println("-------------------------------------")
-		for k, v := range inv {
-			item := allItems[v.Id]
-			fmt.Println(k + 1,") Item : ", item.Icon, " | ", item.Name, "x", v.Quantity, "/ Prix :", item.Price, "₣")
+	for {
+		userChoice := AskPlayerInt("Rentrer 0 pour revenir en arrière")
+		if len(inv) > 0 {
+			fmt.Println("-------------------------------------")
+			fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", c.MaxInventory, " ) ")
+			fmt.Println("-------------------------------------")
+			for k, v := range inv {
+				item := allItems[v.Id]
+				fmt.Println(k + 1,") Item : ", item.Icon, " | ", item.Name, "x", v.Quantity, "/ Prix :", item.Price, "₣")
+			}
+		} else {
+			fmt.Println("---------------------------")
+			fmt.Println("Aucun item pour le moment !")
+			fmt.Println("---------------------------")
 		}
-	} else {
-		fmt.Println("---------------------------")
-		fmt.Println("Aucun item pour le moment !")
-		fmt.Println("---------------------------")
+		if userChoice == 0 {
+			break
+		}
 	}
 }
 
