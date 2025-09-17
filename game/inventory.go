@@ -12,24 +12,24 @@ type Inventory struct {
 }
 
 type Item struct {
-	Id    					int
-	Name  					string
-	Price 					int
-	Icon  					string
-	AddHealth 				int
-	removeEnemyHealth 		int
-	TimeUsing				int
-	giveInventory			int
-	AddPvMax				int
-	PtsAttack				int
-	IsForgeron 				bool
-	IsUsableInGame 			bool
-	CancelPoison			bool
-	RessourceForForgeron 	bool
-	itemNeeded				int
-	itemNeededQuantity		int
-	RewardIG				bool
-	canLooseItem 			int
+	Id                   int
+	Name                 string
+	Price                int
+	Icon                 string
+	AddHealth            int
+	removeEnemyHealth    int
+	TimeUsing            int
+	giveInventory        int
+	AddPvMax             int
+	PtsAttack            int
+	IsForgeron           bool
+	IsUsableInGame       bool
+	CancelPoison         bool
+	RessourceForForgeron bool
+	itemNeeded           int
+	itemNeededQuantity   int
+	RewardIG             bool
+	canLooseItem         int
 }
 
 var allItems = map[int]Item{
@@ -47,7 +47,7 @@ var allItems = map[int]Item{
 	7: {Id: 7, Name: "Carte Navigo périmée", Price: 1, Icon: "🎫", IsForgeron: false, RessourceForForgeron: true},
 	8: {Id: 8, Name: "CV Légendaire", Price: 20, Icon: "📃", IsForgeron: true, PtsAttack: 10, itemNeeded: 4, itemNeededQuantity: 1}, // stylo BIC
 
-	9: {Id: 9, Name: "Sac à dos troué", Price: 20, Icon: "🎒", IsForgeron: false, giveInventory: 5, IsUsableInGame: false, canLooseItem: 20},
+	9:  {Id: 9, Name: "Sac à dos troué", Price: 20, Icon: "🎒", IsForgeron: false, giveInventory: 5, IsUsableInGame: false, canLooseItem: 20},
 	10: {Id: 10, Name: "Sac à dos Décathlon", Price: 35, Icon: "🎒", IsForgeron: false, giveInventory: 10, IsUsableInGame: false},
 
 	// Ressources de craft pour le Forgeron ↓
@@ -60,11 +60,11 @@ var allItems = map[int]Item{
 
 	// ------------------- Ressources Forgeron ↓
 
-	16: {Id: 16, Name: "Casquette du Chômeur", Price: 15, Icon: "🧢", IsForgeron: true, AddPvMax: 5, itemNeeded: 9, itemNeededQuantity: 1}, // laine de chèvre
-	17: {Id: 17, Name: "Costume d’Entretien Froissé", Price: 20, Icon: "🤵", IsForgeron: true, AddPvMax: 10, itemNeeded: 10, itemNeededQuantity: 1}, // attestation
+	16: {Id: 16, Name: "Casquette du Chômeur", Price: 15, Icon: "🧢", IsForgeron: true, AddPvMax: 5, itemNeeded: 9, itemNeededQuantity: 1},             // laine de chèvre
+	17: {Id: 17, Name: "Costume d’Entretien Froissé", Price: 20, Icon: "🤵", IsForgeron: true, AddPvMax: 10, itemNeeded: 10, itemNeededQuantity: 1},    // attestation
 	18: {Id: 18, Name: "Chaussures de Sécurité Abîmées", Price: 30, Icon: "🥾", IsForgeron: true, AddPvMax: 15, itemNeeded: 11, itemNeededQuantity: 1}, // ticket resto
 
-	19: {Id: 19, Name: "Épée en SMIC", Price: 25, Icon: "🗡️", IsForgeron: true, PtsAttack: 15, itemNeeded: 13, itemNeededQuantity: 1}, // lingot de SMIC
+	19: {Id: 19, Name: "Épée en SMIC", Price: 25, Icon: "🗡️", IsForgeron: true, PtsAttack: 15, itemNeeded: 13, itemNeededQuantity: 1},       // lingot de SMIC
 	20: {Id: 20, Name: "Arc de Syndicaliste", Price: 18, Icon: "🏹", IsForgeron: true, PtsAttack: 12, itemNeeded: 12, itemNeededQuantity: 1}, // badge CGT
 }
 
@@ -82,7 +82,7 @@ func GetItemIdExist(itemId int) bool {
 }
 
 func (c *Character) AddItem(itemId, itemQuantity int) {
-	if c.GetItemNumber() + itemQuantity > c.MaxInventory {
+	if c.GetItemNumber()+itemQuantity > c.MaxInventory {
 		fmt.Println("Impossible d'ajouter cet item, vous n'avez plus de places !")
 		return
 	}
@@ -120,7 +120,7 @@ func (c Character) AccessInventory() {
 			fmt.Println("-------------------------------------")
 			for k, v := range c.Inventory {
 				item := allItems[v.Id]
-				fmt.Println(k + 1,") Item : ", item.Icon, " | ", item.Name, "x", v.Quantity, "/ Prix :", item.Price, "₣")
+				fmt.Println(k+1, ") Item : ", item.Icon, " | ", item.Name, "x", v.Quantity, "/ Prix :", item.Price, "€")
 			}
 		} else {
 			fmt.Println("---------------------------")
@@ -132,8 +132,6 @@ func (c Character) AccessInventory() {
 		if ChoiceUser == 0 {
 			return
 		}
-
-		// if allItems[]
 	}
 }
 
@@ -150,8 +148,8 @@ func (c *Character) UseItem(itemId, q int) {
 	}
 
 	if item.AddHealth > 0 {
-		
-		if c.Pv + item.AddHealth <= c.PvMax {
+
+		if c.Pv+item.AddHealth <= c.PvMax {
 			c.Pv += item.AddHealth
 		} else {
 			c.Pv = c.PvMax

@@ -23,9 +23,6 @@ func AskPlayer(question string) interface{} {
 	return text
 }
 
-/*
-	Si on veut forcer le type de la réponse du joueur.
-*/
 func AskPlayerString(question string) string {
 	reader := bufio.NewReader(os.Stdin)
 	

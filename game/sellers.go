@@ -8,7 +8,7 @@ import (
 
 func RandomNbr(max int) int {
 	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(max) + 1 // +1 pour éviter l’index 0
+	return rand.Intn(max) + 1
 }
 
 func (c *Character) MenuSellers() {
@@ -29,7 +29,7 @@ func (c *Character) MenuSellers() {
 		switch playerChoice {
 		case 1:
 			c.MenuMerchant()
-		case 2 :
+		case 2:
 			c.MenuForgeron()
 		case 0:
 			fmt.Println("Vous quittez le marchand.")
@@ -47,7 +47,7 @@ func (c *Character) MenuMerchant() {
 		ClearTerminal()
 		fmt.Println("-------------------------------------")
 		fmt.Println("     Bienvenue chez le Marchand      ")
-		fmt.Printf("          Quantité de ₣ : %v          \n", c.Money)
+		fmt.Printf("          Quantité de € : %v          \n", c.Money)
 		fmt.Println("-------------------------------------")
 		fmt.Println("Voici les options disponibles :")
 
@@ -63,7 +63,7 @@ func (c *Character) MenuMerchant() {
 		switch playerChoice {
 		case 1:
 			c.BuyMerchantItem()
-		case 2 :
+		case 2:
 			if len(c.Inventory) > 0 {
 				c.sellMerchantItem()
 			}
@@ -82,7 +82,7 @@ func (c *Character) BuyMerchantItem() {
 		for len(allChoice) < 3 {
 			randomNbr := RandomNbr(len(allItems))
 			itemRnd := allItems[randomNbr]
-			
+
 			if itemRnd.IsForgeron || itemRnd.RewardIG {
 				continue
 			}
@@ -100,7 +100,7 @@ func (c *Character) BuyMerchantItem() {
 		}
 
 		fmt.Println("-------------------------------------")
-		fmt.Printf("          Quantité de ₣ : %v          \n", c.Money)
+		fmt.Printf("          Quantité de € : %v          \n", c.Money)
 		fmt.Println("   Articles disponibles à l’achat :  ")
 		fmt.Println("-------------------------------------")
 
@@ -108,7 +108,7 @@ func (c *Character) BuyMerchantItem() {
 
 		for k, v := range allChoice {
 			item := allItems[v]
-			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣")
+			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "€")
 		}
 
 		fmt.Println("")
@@ -129,7 +129,7 @@ func (c *Character) BuyMerchantItem() {
 		chosen := allItems[chosenId]
 
 		if c.Money < chosen.Price {
-			fmt.Println("₣ - Vous n’avez pas assez d’argent !")
+			fmt.Println("€ - Vous n’avez pas assez d’argent !")
 			return
 		}
 		if c.GetItemNumber() >= c.MaxInventory {
@@ -140,7 +140,7 @@ func (c *Character) BuyMerchantItem() {
 		c.AddItem(chosen.Id, 1)
 		c.UpdateMoney(chosen.Price, "-")
 		fmt.Printf("Vous avez acheté : %v | %v x1\n", chosen.Name, chosen.Icon)
-		
+
 		if !chosen.IsUsableInGame {
 			c.UseItem(chosen.Id, 1)
 		}
@@ -161,14 +161,14 @@ func (c *Character) sellMerchantItem() {
 		}
 
 		ClearTerminal()
-		
+
 		fmt.Println("-------------------------------------")
 		fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), "/", c.MaxInventory, ") ")
 		fmt.Println("-------------------------------------")
 
 		for k, v := range c.Inventory {
 			item := allItems[v.Id]
-			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "x", v.Quantity, "- Prix de vente :", item.Price/2, "₣")
+			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "x", v.Quantity, "- Prix de vente :", item.Price/2, "€")
 		}
 
 		userChoice := AskPlayerInt("Tapez le numéro de l’objet à vendre (0 pour annuler) : ")
@@ -196,7 +196,7 @@ func (c *Character) sellMerchantItem() {
 
 		c.RemoveItem(item.Id, itemNbr)
 		c.UpdateMoney(price, "+")
-		fmt.Printf("Vous avez vendu %v %v x %v et gagné %d₣\n", item.Icon, item.Name, itemNbr, price)
+		fmt.Printf("Vous avez vendu %v %v x %v et gagné %d€\n", item.Icon, item.Name, itemNbr, price)
 	}
 }
 
@@ -204,7 +204,6 @@ func (c *Character) MenuForgeron() {
 	var playerChoice int
 
 	for {
-
 		ClearTerminal()
 
 		fmt.Println("-------------------------------------")
@@ -224,7 +223,7 @@ func (c *Character) MenuForgeron() {
 		case 0:
 			fmt.Println("Vous quittez le forgeron.")
 			return
-			
+
 		default:
 			fmt.Println("Choix invalide.")
 		}
@@ -254,7 +253,7 @@ func (c *Character) BuyForgeronItem() {
 		}
 
 		fmt.Println("-------------------------------------")
-		fmt.Printf("          Quantité de ₣ : %v          \n", c.Money)
+		fmt.Printf("          Quantité de € : %v          \n", c.Money)
 		fmt.Println("   Articles disponibles à l’achat :  ")
 		fmt.Println("-------------------------------------")
 
@@ -263,7 +262,7 @@ func (c *Character) BuyForgeronItem() {
 		for k, v := range allChoice {
 			item := allItems[v]
 			itemNeed := allItems[item.itemNeeded]
-			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "₣ | Item nécessaire : ", itemNeed.Icon, " | ", itemNeed.Name, "x", item.itemNeededQuantity)
+			fmt.Println(k+1, ")", item.Icon, "|", item.Name, "- Prix :", item.Price, "€ | Item nécessaire : ", itemNeed.Icon, " | ", itemNeed.Name, "x", item.itemNeededQuantity)
 		}
 
 		fmt.Println("")
@@ -274,7 +273,7 @@ func (c *Character) BuyForgeronItem() {
 			fmt.Println("Achat annulé.")
 			return
 		}
-		
+
 		if nbrChoice < 1 || nbrChoice > len(allChoice) {
 			fmt.Println("Choix invalide.")
 			return
@@ -284,7 +283,7 @@ func (c *Character) BuyForgeronItem() {
 		chosen := allItems[chosenId]
 
 		if c.Money < chosen.Price {
-			fmt.Println("₣ - Vous n’avez pas assez d’argent !")
+			fmt.Println("€ - Vous n’avez pas assez d’argent !")
 			return
 		}
 
@@ -298,8 +297,8 @@ func (c *Character) BuyForgeronItem() {
 		for _, v := range c.Inventory {
 			if v.Id == itemNeeded {
 				c.AddItem(chosen.Id, 1)
-				c.UpdateMoney(chosen.Price, "-")	
-				fmt.Printf("Vous avez acheté : %v | %v x1\n", chosen.Name, chosen.Icon)	
+				c.UpdateMoney(chosen.Price, "-")
+				fmt.Printf("Vous avez acheté : %v | %v x1\n", chosen.Name, chosen.Icon)
 				return
 			}
 		}
