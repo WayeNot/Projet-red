@@ -54,6 +54,10 @@ func AskPlayerInt(question string) int {
 	return 0
 }
 
+func ClearTerminal() {
+	fmt.Print("\033[H\033[2J")
+}
+
 func isInt(s string) bool {
 	if len(s) == 0 {
 		return false
