@@ -27,6 +27,8 @@ type Item struct {
 	CancelPoison			bool
 	RessourceForForgeron 	bool
 	itemNeeded				int
+	itemNeededQuantity		int
+	RewardIG				bool
 }
 
 var allItems = map[int]Item{
@@ -46,21 +48,21 @@ var allItems = map[int]Item{
 
 	// Ressources de craft pour le Forgeron ↓
 
-	9: {Id: 9, Name: "Laine de Chèvre", Price: 5, Icon: "🐐", IsForgeron: false, RessourceForForgeron: true},
-	10: {Id: 10, Name: "Attestation Pôle-Emploi", Price: 7, Icon: "📑", IsForgeron: false, RessourceForForgeron: true},
-	11: {Id: 11, Name: "Ticket resto usagé", Price: 2, Icon: "🎟", IsForgeron: false, RessourceForForgeron: true},
-	12: {Id: 12, Name: "Badge CGT", Price: 10, Icon: "👑", IsForgeron: false, RessourceForForgeron: true},
-	13: {Id: 13, Name: "Lingot de SMIC", Price: 12, Icon: "💰", IsForgeron: false, RessourceForForgeron: true},
+	9: {Id: 9, Name: "Laine de Chèvre", Price: 5, Icon: "🐐", IsForgeron: false, RessourceForForgeron: true, RewardIG: true},
+	10: {Id: 10, Name: "Attestation Pôle-Emploi", Price: 7, Icon: "📑", IsForgeron: false, RessourceForForgeron: true, RewardIG: true},
+	11: {Id: 11, Name: "Ticket resto usagé", Price: 2, Icon: "🎟", IsForgeron: false, RessourceForForgeron: true, RewardIG: true},
+	12: {Id: 12, Name: "Badge CGT", Price: 10, Icon: "👑", IsForgeron: false, RessourceForForgeron: true, RewardIG: true},
+	13: {Id: 13, Name: "Lingot de SMIC", Price: 12, Icon: "💰", IsForgeron: false, RessourceForForgeron: true, RewardIG: true},
 
 	// ------------------- Ressources Forgeron ↓
 
-	14: {Id: 14, Name: "Casquette du Chômeur", Price: 5, Icon: "🧢", IsForgeron: true, AddPvMax: 10, itemNeeded: 9}, // laine de chèvre
-	15: {Id: 15, Name: "Costume d’Entretien Froissé", Price: 15, Icon: "🤵", IsForgeron: true, AddPvMax: 25, itemNeeded: 10}, // attestation
-	16: {Id: 16, Name: "Chaussures de Sécurité Abîmées", Price: 8, Icon: "🥾", IsForgeron: true, AddPvMax: 15, itemNeeded: 11}, // ticket resto
+	14: {Id: 14, Name: "Casquette du Chômeur", Price: 5, Icon: "🧢", IsForgeron: true, AddPvMax: 10, itemNeeded: 9, itemNeededQuantity: 1}, // laine de chèvre
+	15: {Id: 15, Name: "Costume d’Entretien Froissé", Price: 15, Icon: "🤵", IsForgeron: true, AddPvMax: 25, itemNeeded: 10, itemNeededQuantity: 1}, // attestation
+	16: {Id: 16, Name: "Chaussures de Sécurité Abîmées", Price: 8, Icon: "🥾", IsForgeron: true, AddPvMax: 15, itemNeeded: 11, itemNeededQuantity: 1}, // ticket resto
 
-	17: {Id: 17, Name: "CV Légendaire", Price: 20, Icon: "📃", IsForgeron: true, PtsAttack: 10, itemNeeded: 4}, // stylo BIC
-	18: {Id: 18, Name: "Épée en SMIC", Price: 25, Icon: "🗡️", IsForgeron: true, PtsAttack: 15, itemNeeded: 13}, // lingot de SMIC
-	19: {Id: 19, Name: "Arc de Syndicaliste", Price: 18, Icon: "🏹", IsForgeron: true, PtsAttack: 12, itemNeeded: 12}, // badge CGT
+	17: {Id: 17, Name: "CV Légendaire", Price: 20, Icon: "📃", IsForgeron: true, PtsAttack: 10, itemNeeded: 4, itemNeededQuantity: 1}, // stylo BIC
+	18: {Id: 18, Name: "Épée en SMIC", Price: 25, Icon: "🗡️", IsForgeron: true, PtsAttack: 15, itemNeeded: 13, itemNeededQuantity: 1}, // lingot de SMIC
+	19: {Id: 19, Name: "Arc de Syndicaliste", Price: 18, Icon: "🏹", IsForgeron: true, PtsAttack: 12, itemNeeded: 12, itemNeededQuantity: 1}, // badge CGT
 }
 
 func (c Character) GetItemNumber() int {
@@ -111,7 +113,6 @@ func (c Character) AccessInventory() {
 	inv := c.Inventory
 
 	for {
-		userChoice := AskPlayerInt("Rentrer 0 pour revenir en arrière")
 		if len(inv) > 0 {
 			fmt.Println("-------------------------------------")
 			fmt.Println(" Votre Inventaire : (", c.GetItemNumber(), " / ", c.MaxInventory, " ) ")
@@ -125,8 +126,10 @@ func (c Character) AccessInventory() {
 			fmt.Println("Aucun item pour le moment !")
 			fmt.Println("---------------------------")
 		}
-		if userChoice == 0 {
-			break
+		ChoiceUser := AskPlayerInt("Tapez 0 pour revenir au menu principal")
+
+		if ChoiceUser == 0 {
+			return
 		}
 	}
 }
