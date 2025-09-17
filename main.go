@@ -33,7 +33,7 @@ func main(){
 				Label: "Accéder au marchand",
 				Action: func(p *red.Character) {
 					red.ClearTerminal()
-					p.MenuMerchant()
+					p.MenuSellers()
 				},
 			},
 			{
