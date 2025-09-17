@@ -37,6 +37,13 @@ func main(){
 				},
 			},
 			{
+				Label: "Continuer les quêtes",
+				Action: func(p *red.Character) {
+					red.ClearTerminal()
+					Quest1(&player)
+				},
+			},
+			{
 				Label: "Quitter",
 				Action: func(p *red.Character) {
 					fmt.Println("Merci d'avoir joué !")
@@ -74,4 +81,32 @@ func Introduction() {
 	fmt.Println("Bonne chance, et que le RSA soit avec toi.")
 	fmt.Println("===================================")
 	fmt.Println("")
+}
+
+func Quest1(player *red.Character) {
+	fmt.Println("Quête 1 : Pointer à Pôle Emploi")
+	fmt.Println("===================================")
+	fmt.Println("Il est lundi, il pleut, vous arrivez à Pôle Emploi et devez pointer pour signaler votre présence.")
+	menu := red.Menu{
+		Name: "Quête 1 :",
+		Choices: []red.Choice{
+			{
+				Label: "Pointer",
+				Action: func(p *red.Character) {
+					fmt.Println("Vous êtes présent !")
+					fmt.Println("+10 XP administratif !")
+				},
+			},
+			{
+				Label: "Ne pas pointer",
+				Action: func(p *red.Character) {
+					fmt.Println("Le manager vous appelle.. Il n'est pas content de votre absence !")
+					fmt.Println("-10 €. Pôle Emploi vient de vous débiter 10 euros..")
+					fmt.Println("Soyez présent à l'avenir !")
+				},
+			},
+		},
+	}
+	quest := red.InitQuest("Pointer à Pôle Emploi", 5, 0, 1, menu)
+	quest.PlayQuest(player)
 }
