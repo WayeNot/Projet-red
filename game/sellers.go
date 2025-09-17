@@ -225,31 +225,42 @@ func (c *Character) BuyForgeronItem() {
 	}
 
 	var nbrChoice int
-	fmt.Print("Quel article choisissez-vous (0 pour annuler) ? ")
-	fmt.Scan(&nbrChoice)
 
-	if nbrChoice == 0 {
-		fmt.Println("Achat annulé.")
-		return
-	}
-	if nbrChoice < 1 || nbrChoice > len(allChoice) {
-		fmt.Println("Choix invalide.")
-		return
-	}
+	for {
+		fmt.Print("Quel article choisissez-vous (0 pour annuler) ? ")
+		fmt.Scan(&nbrChoice)
 
-	chosenId := allChoice[nbrChoice-1]
-	chosen := allItems[chosenId]
+		if nbrChoice == 0 {
+			fmt.Println("Achat annulé.")
+			return
+		}
+		
+		if nbrChoice < 1 || nbrChoice > len(allChoice) {
+			fmt.Println("Choix invalide.")
+			return
+		}
 
-	if c.Money < chosen.Price {
-		fmt.Println("₣ - Vous n’avez pas assez d’argent !")
-		return
-	}
-	if c.GetItemNumber() >= c.MaxInventory {
-		fmt.Println("Vous n’avez plus de place dans votre inventaire !")
-		return
-	}
+		chosenId := allChoice[nbrChoice-1]
+		chosen := allItems[chosenId]
 
-	c.AddItem(chosen.Id, 1)
-	c.UpdateMoney(chosen.Price, "-")
-	fmt.Println("Vous avez acheté :", chosen.Icon, chosen.Name)
+		if c.Money < chosen.Price {
+			fmt.Println("₣ - Vous n’avez pas assez d’argent !")
+			return
+		}
+		if c.GetItemNumber() >= c.MaxInventory {
+			fmt.Println("Vous n’avez plus de place dans votre inventaire !")
+			return
+		}
+
+		itemNeeded := allItems[allItems[nbrChoice].itemNeeded].Id
+		for _, v := range c.Inventory {
+			if v.Id == itemNeeded {
+				c.AddItem(chosen.Id, 1)
+				c.UpdateMoney(chosen.Price, "-")		
+				break
+			}
+		}
+
+		fmt.Println("Vous n'avez pas les items requis !")
+	}
 }
