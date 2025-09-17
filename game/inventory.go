@@ -170,7 +170,7 @@ func (c *Character) UseItem(itemId, q int) {
 
 	if item.giveInventory > 0 {
 		c.MaxInventory += item.giveInventory
-		fmt.Printf("Vous avez équipé un sac à dos, votre inventaire est passé à %v slots", c.MaxInventory + item.giveInventory)
+		fmt.Printf("Vous avez équipé un sac à dos, votre inventaire est passé à %v slots\n", c.MaxInventory)
 	}
 
 	if item.removeEnemyHealth > 0 {
