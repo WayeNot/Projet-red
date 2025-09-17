@@ -105,7 +105,7 @@ func Quest1(player *red.Character) {
 					fmt.Println("-10 €. Pôle Emploi vient de vous débiter 10 euros.. Et -10 XP administratif !")
 					fmt.Println("Soyez présent à l'avenir !")
 					player.UpdateMoney(10, "-")
-					player.UpdateXp(10, "+")
+					player.UpdateXp(10, "-")
 				},
 			},
 		},
