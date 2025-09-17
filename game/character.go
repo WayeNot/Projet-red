@@ -70,3 +70,32 @@ func (c *Character) UpdateMoney(q int, s string) {
 			c.Money += q
 	}
 }
+
+func (c *Character) AddPV(pv int) {
+	if c.GetPV() + pv > c.GetMaxPV() {
+		fmt.Println("Action impossicle, PV limités à ", c.GetMaxPV())
+	} else {
+		c.Pv += pv
+	}
+}
+
+func (c *Character) RemovePV(pv int) {
+	if c.GetPV() - pv <= 0 {
+		c.SetPV(0)
+		c.IsDead = true
+	} else {
+		c.SetPV(c.GetPV() - pv)
+	}
+}
+
+func (c *Character) SetPV(pv int) {
+	c.Pv = pv
+}
+
+func (c *Character) GetPV() int{
+	return c.Pv
+}
+
+func (c *Character) GetMaxPV() int{
+	return c.PvMax
+}
