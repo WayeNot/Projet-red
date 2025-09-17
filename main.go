@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"red/game"
 )
 
@@ -38,9 +39,8 @@ func main(){
 			{
 				Label: "Quitter",
 				Action: func(p *red.Character) {
-					red.ClearTerminal()
-					//TODO
-					fmt.Println("Coming SOON")
+					fmt.Println("Merci d'avoir joué !")
+					os.Exit(0)
 				},
 			},
 		},
