@@ -98,6 +98,6 @@ Obtenir le **CDI Légendaire** (Contrat de Durée Infinie), trésor ultime des a
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/tonpseudo/chomage-et-dragons.git
-cd chomage-et-dragons
+git clone https://github.com/WayeNot/Projet-red.git
+cd Projet-red/
 go run main.go
