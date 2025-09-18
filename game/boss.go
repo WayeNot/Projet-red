@@ -16,6 +16,23 @@ func InitBoss(name string, pv int, maxpv int) Boss{
 	return Boss{name, pv, maxpv, false, []func(*Character){}}
 }
 
+func InitBossDRH() Boss {
+	superControler := InitBoss("Super Contrôleur de Pôle Emploi", 100, 100)
+	superControler.AddAttacks(func(c *Character) {
+		fmt.Println("Le Super Contrôleur t’attaque avec un 'Contrat CDD de 3 jours' ! -10 PV")
+		c.Pv -= 10
+	})
+	superControler.AddAttacks(func(c *Character) {
+		fmt.Println("Le Super Contrôleur sort un PowerPoint de 400 slides... tu t'endors. -20 PV")
+		c.Pv -= 20
+	})
+	superControler.AddAttacks(func(c *Character) {
+		fmt.Println("Le Super Contrôleur te fixe froidement... t'as la pression. -8 PV")
+		c.Pv -= 8
+	})
+	return superControler
+}
+
 func (b *Boss) AddPV(pv int) {
 	if b.GetPV() + pv > b.GetMaxPV() {
 		fmt.Println("Action impossible, PV limités à ", b.GetMaxPV())

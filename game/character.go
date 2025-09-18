@@ -15,10 +15,11 @@ type Character struct {
 	MaxInventory int
 	LoseRate     int
 	Inventory    []Inventory
+	Quests []Quest
 }
 
 func New(Name string, Pv, PvMax, Xp int, Money int, IsDead bool, MaxInventory, LoseRate int, Inventory []Inventory) Character {
-	return Character{Name, Pv, PvMax, Xp, Money, IsDead, MaxInventory, LoseRate, Inventory}
+	return Character{Name, Pv, PvMax, Xp, Money, IsDead, MaxInventory, LoseRate, Inventory, []Quest{}}
 }
 
 func InitCharacter(charName string) Character {
@@ -113,4 +114,16 @@ func (c *Character) EditName() {
 		return
 	}
 	fmt.Println("Pas assez d'argent")
+}
+
+func (c *Character) GetQuests() []Quest {
+	return c.Quests
+}
+
+func (c *Character) GetNextQuest() int {
+	if len(c.GetQuests()) == 0 {
+		return 0
+	}
+
+	return len(c.GetQuests())-1
 }
