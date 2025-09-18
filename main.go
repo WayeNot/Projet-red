@@ -6,6 +6,8 @@ import (
 	red "red/game"
 )
 
+var currentQuest int = 1
+
 func main() {
 	Introduction()
 	player := red.InitCharacter("")
@@ -40,7 +42,7 @@ func main() {
 					Label: "Continuer les quêtes",
 					Action: func(p *red.Character) {
 						red.ClearTerminal()
-						Quest1(&player)
+						PlayNextQuest(&player)
 					},
 				},
 				{
@@ -87,6 +89,27 @@ func Introduction() {
 	fmt.Println("Bonne chance, et que le RSA soit avec toi.")
 	fmt.Println("===================================")
 	fmt.Println()
+}
+
+func PlayNextQuest(p *red.Character) {
+	switch currentQuest {
+	case 1:
+		Quest1(p)
+	case 2:
+		Quest2(p)
+	case 3:
+		Quest3(p)
+	case 4:
+		Quest4(p)
+	case 5:
+		Quest5(p)
+	case 6:
+		Quest6(p)
+	default:
+		fmt.Println("Félicitations ! Tu as terminé toutes les quêtes. Retourne boire une 8.6, fraîche cette fois-ci.")
+		return
+	}
+	currentQuest++
 }
 
 func Quest1(player *red.Character) {
@@ -272,42 +295,39 @@ func Quest5(player *red.Character) {
 func Quest6(player *red.Character) {
 	fmt.Println("Quête 6 (Boss final) : Le Super Contrôleur de Pôle Emploi")
 	fmt.Println("===================================")
-	fmt.Println("⚔️ Le Super Contrôleur veut te RADIER. Combat tour par tour !")
-	menu := red.Menu{
-		Name: "Quête 6 :",
-		Choices: []red.Choice{
-			{
-				Label: "Attaque au Stylo BIC (5 dmg)",
-				Action: func(p *red.Character) {
-					fmt.Println("🖊️ Tu plantes le Stylo BIC ! -5 PV au boss.")
-				},
-			},
-			{
-				Label: "Attaque à l’Épée en SMIC (15 dmg)",
-				Action: func(p *red.Character) {
-					fmt.Println("🗡️ Tu frappes avec l’Épée en SMIC ! -15 PV au boss.")
-				},
-			},
-			{
-				Label: "Utiliser un item (Pain, Canette, Kebab)",
-				Action: func(p *red.Character) {
-					fmt.Println("🎒 Tu fouilles ton sac… (à implémenter avec ton inventaire).")
-				},
-			},
-			{
-				Label: "Sort spécial : Appel à la grève (si Badge CGT)",
-				Action: func(p *red.Character) {
-					fmt.Println("👑 Tu invoques la CGT ! Le boss est stun un tour.")
-				},
-			},
-			{
-				Label: "Fuir",
-				Action: func(p *red.Character) {
-					fmt.Println("💀 Impossible, le Contrôleur est partout.")
-				},
-			},
-		},
+
+	boss := red.InitBoss("Super Contrôleur de Pôle Emploi", 120, 120)
+	boss.AddAttacks(
+			func(p *red.Character) {
+				fmt.Println("💥 Le Contrôleur te dit « Monsieur, vous n'avez pas l'expérience requise. » : -15 PV !")
+				p.RemovePV(15)
+			},)
+	boss.AddAttacks(func(p *red.Character) {
+				fmt.Println("🧾 Le Contrôleur t’étouffe avec de la paperasse : -10 PV !")
+				p.RemovePV(10)
+			},)
+	boss.AddAttacks(func(p *red.Character) {
+				fmt.Println("📞 Le Contrôleur t’appelle à 8h du mat pour un RDV inutile : -20 PV !")
+				p.RemovePV(20)
+			},)
+	boss.AddAttacks(func(p *red.Character) {
+				fmt.Println("🤢 Le Contrôleur te dit que tu sens la clope et la bière. Pas très présentable... : -8 PV !")
+				p.RemovePV(8)
+			},)
+	boss.AddAttacks(func(p *red.Character) {
+				fmt.Println("🕰️ Le Contrôleur n'est pas content car tu es arrivé en retard : -10 PV !")
+				p.RemovePV(10)
+			},)
+
+	combat := red.InitCombat(boss, *player)
+	combat.Start()
+
+	if combat.IsWinner() {
+		fmt.Println("🏆 Tu as vaincu le Super Contrôleur et remporté le CDI Légendaire !")
+		player.UpdateXp(200, "+")
+		player.UpdateMoney(300, "+")
+		player.AddItem(8, 1)
+	} else {
+		fmt.Println("💀 Tu t’es fait éliminé mais tu pourras retenter la prochaine fois.")
 	}
-	quest := red.InitQuest("Le Super Contrôleur de Pôle Emploi", 0, 0, 0, menu)
-	quest.PlayQuest(player)
 }

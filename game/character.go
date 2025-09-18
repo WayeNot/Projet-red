@@ -70,7 +70,7 @@ func (c *Character) UpdateMoney(q int, s string) {
 
 func (c *Character) AddPV(pv int) {
 	if c.GetPV()+pv > c.GetMaxPV() {
-		fmt.Println("Action impossicle, PV limités à ", c.GetMaxPV())
+		fmt.Println("Action impossible, PV limités à ", c.GetMaxPV())
 	} else {
 		c.Pv += pv
 	}

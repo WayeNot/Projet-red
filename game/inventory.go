@@ -67,7 +67,7 @@ var allItems = map[int]Item{
 	17: {Id: 17, Name: "Costume d’Entretien Froissé", Price: 20, Icon: "🤵", desc: "Il gratte, il brille, il sent le stress. Parfait pour convaincre un recruteur blasé.", IsForgeron: true, AddPvMax: 10, itemNeeded: 10, itemNeededQuantity: 1},    // attestation
 	18: {Id: 18, Name: "Chaussures de Sécurité Abîmées", Price: 30, Icon: "🥾", desc: "Encore pleines de poussière… elles ont déjà survécu à trois chantiers.", IsForgeron: true, AddPvMax: 15, itemNeeded: 11, itemNeededQuantity: 1}, // ticket resto
 
-	19: {Id: 19, Name: "Épée en SMIC", Price: 25, Icon: "🗡️", IsForgeron: true, PtsAttack: 15, itemNeeded: 13, itemNeededQuantity: 1},       // lingot de SMIC
+	19: {Id: 19, Name: "Épée en SMIC", Price: 25, Icon: "🗡️", IsForgeron: true, PtsAttack: 25, itemNeeded: 13, itemNeededQuantity: 1},       // lingot de SMIC
 	20: {Id: 20, Name: "Arc de Syndicaliste", Price: 18, Icon: "🏹", IsForgeron: true, PtsAttack: 12, itemNeeded: 12, itemNeededQuantity: 1}, // badge CGT
 }
 
